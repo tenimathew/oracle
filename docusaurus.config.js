@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const config = {
   title: "Oracle Tutorial",
   // tagline: "Dinosaurs are cool",
-  url: "https://tenimathew.github.io/oracle/",
+  url: "https://tenimathew.github.io/",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
