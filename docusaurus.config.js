@@ -10,7 +10,7 @@ const config = {
   // tagline: "Dinosaurs are cool",
   url: "https://tenimathew.github.io/",
   baseUrl: "/oracle/",
-  onBrokenLinks: "throw",
+  onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
 
