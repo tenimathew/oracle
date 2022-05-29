@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoracle=self.webpackChunkoracle||[]).push([[6913],{7558:function(e){e.exports=JSON.parse('{"permalink":"/oracle/blog/tags/docusaurus","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

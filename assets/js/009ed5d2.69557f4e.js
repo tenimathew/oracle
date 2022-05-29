@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoracle=self.webpackChunkoracle||[]).push([[2809],{7178:function(a){a.exports=JSON.parse('{"label":"hola","permalink":"/oracle/blog/tags/hola","allTagsPath":"/oracle/blog/tags","count":1}')}}]);

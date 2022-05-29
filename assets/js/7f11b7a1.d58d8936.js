@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoracle=self.webpackChunkoracle||[]).push([[5869],{664:function(e){e.exports=JSON.parse('{"permalink":"/oracle/blog/tags/facebook","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

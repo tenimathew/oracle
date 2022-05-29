@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoracle=self.webpackChunkoracle||[]).push([[1829],{4688:function(a){a.exports=JSON.parse('{"label":"docusaurus","permalink":"/oracle/blog/tags/docusaurus","allTagsPath":"/oracle/blog/tags","count":4}')}}]);
