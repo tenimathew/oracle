@@ -9,14 +9,14 @@ const config = {
   title: "My Site",
   tagline: "Dinosaurs are cool",
   url: "https://tenimathew.github.io/oracle/",
-  baseUrl: "/",
+  baseUrl: "/oracle/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "tenimathew.github.io", // Usually your GitHub org/user name.
+  organizationName: "tenimathew", // Usually your GitHub org/user name.
   projectName: "oracle", // Usually your repo name.
   trailingSlash: false,
   deploymentBranch: "gh-pages",
