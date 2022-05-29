@@ -9,7 +9,7 @@ const config = {
   title: "Oracle Tutorial",
   // tagline: "Dinosaurs are cool",
   url: "https://tenimathew.github.io/oracle/",
-  baseUrl: "/oracle/",
+  baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
@@ -35,7 +35,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          // routeBasePath: "/",
+          routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
         },
         theme: {
