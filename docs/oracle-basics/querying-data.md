@@ -2,18 +2,16 @@
 slug: /
 id: Section 1. Querying data
 sidebar_position: 1
-description: SELECT statement
+description: SELECT, DUAL
 ---
 
-## Syntax
+## SELECT
+
+### Syntax
 
 ```sql
-SELECT
-  column_1,
-  column_2,
-  ...
-FROM
-  table_name;
+SELECT column_1, column_2
+FROM table_name;
 ```
 
 You can use the shorthand asterisk (\*) to instruct Oracle to return data from all columns of a table as follows:
@@ -29,3 +27,9 @@ You should the asterisk (\*) shorthand for ad-hoc queries only.
 This is because a table may have more or fewer columns in the future due to the business changes.
 
 If you use the asterisk (\*) in the application code and assume that the table has a fixed set of columns, the application may either not process the additional columns or access the removed columns.
+
+## DUAL
+
+`DUAL` table which is a special table that belongs to the schema of the user SYS but it is accessible to all users.
+
+The `DUAL` table has one column named `DUMMY` whose data type is `VARCHAR2()` and contains one row with a value `X`.
