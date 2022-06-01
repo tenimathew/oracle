@@ -40,6 +40,14 @@ SAVEPOINT sp1;
 ROLLBACK TO sp1;
 ```
 
+#### COMMIT
+
+All clauses after the `COMMIT` keyword are optional. If you specify only `COMMIT`, then the default is `COMMIT WORK WRITE IMMEDIATE WAIT`.
+
+#### WORK
+
+The `WORK` keyword is supported for compliance with standard SQL. The statements `COMMIT` and `COMMIT WORK` are equivalent.
+
 ### DQL (Data Query Language)
 
 Used to retrieve data from the database
@@ -246,3 +254,11 @@ CREATE TABLE inventories
       ON DELETE CASCADE
   );
 ```
+
+[ot_create_user.sql](sql-files/ot_create_user.sql)
+
+[ot_data.sql](sql-files/ot_data.sql)
+
+[ot_drop.sql](sql-files/ot_drop.sql)
+
+[ot_schema.sql](sql-files/ot_schema.sql)

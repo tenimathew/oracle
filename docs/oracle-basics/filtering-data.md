@@ -1,7 +1,7 @@
 ---
 id: Section 3. Filtering data
 sidebar_position: 3
-description: DISTINCT, WHERE, FETCH, Operators
+description: DISTINCT, WHERE, FETCH, Operators, CASE
 ---
 
 ## DISTINCT
@@ -160,4 +160,75 @@ VALUES(3,'Buy 3 Get 1 free');
 SELECT product_id, discount_message
 FROM discounts
 WHERE discount_message LIKE '%25!%%' ESCAPE '!';
+```
+
+## CASE
+
+You can use the `CASE` expression in statements such as `SELECT`, `UPDATE`, or `DELETE`, and in clauses like `SELECT`, `WHERE`, `HAVING`, and `ORDER BY`.
+
+### Simple CASE expression
+
+```sql
+SELECT product_id, company_name,
+    (CASE product_id
+        WHEN 'p1' THEN 'Cameras'
+        WHEN 'p2' THEN 'Mobiles'
+            ELSE 'Not available'
+    END) AS product
+FROM product;
+```
+
+### Searched CASE expression
+
+```sql
+SELECT product_id, company_name,
+    (CASE
+        WHEN product_id = 'p1' THEN 'Cameras'
+        WHEN product_id = 'p2' THEN 'Mobiles'
+        WHEN product_id = 'p3' AND company_name = 'Samsung' THEN 'TV'
+        ELSE 'Not available'
+    END) AS product
+FROM product;
+```
+
+#### CASE expression in an ORDER BY clause
+
+```sql
+SELECT *
+FROM locations
+WHERE country_id in ('US','CA','UK')
+ORDER BY country_id,
+  CASE country_id
+    WHEN 'US'
+    THEN state
+    ELSE city
+  END;
+```
+
+#### CASE expression in a HAVING clause
+
+```sql
+SELECT product_name, category_id,
+   COUNT(product_id)
+FROM order_items
+INNER JOIN products USING (product_id)
+GROUP BY product_name, category_id
+HAVING
+    COUNT(CASE WHEN category_id = 1 THEN product_id ELSE NULL END ) > 5 OR
+    COUNT(CASE WHEN category_id = 2 THEN product_id ELSE NULL END) > 2
+ORDER BY product_name;
+```
+
+#### CASE expression in an UPDATE statement
+
+```sql
+UPDATE products
+SET
+  list_price =
+  CASE
+    WHEN ROUND((list_price - standard_cost) * 100 / list_price,2) < 12
+    THEN (standard_cost  + 1) * 12
+  END
+WHERE
+  ROUND((list_price - standard_cost) * 100 / list_price,2) < 12;
 ```

@@ -20,7 +20,7 @@ ORDER BY column_1 [ASC | DESC] [NULLS FIRST | NULLS LAST];
 
 Note that the `ORDER BY` clause is always the last clause in a `SELECT` statement until 12c. Now last clause is row limiting clause.
 
-### Sort rows by column’s positions example
+### Sort rows by column’s position
 
 You don’t need to specify the column names for sorting the data. If you prefer, you can use the positions of the column in the `ORDER BY` clause.
 
