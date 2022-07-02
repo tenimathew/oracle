@@ -4,6 +4,12 @@ sidebar_position: 1
 description: Intro
 ---
 
+git add .
+git commit -m "first commit"
+git push -u origin main
+GIT_USER=tenimathew yarn deploy
+Generate tocken for password
+
 ## SQL Commands
 
 ### DDL (Data Definition Language)
