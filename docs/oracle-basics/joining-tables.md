@@ -332,3 +332,37 @@ ORDER BY
    employee1,
    employee2;
 ```
+
+## Hierarchical Queries
+
+**START WITH** -> Define the root node(s) of the hierarchy
+**CONNECT BY** -> Defines how the current row (child) relates to a prior row(parent)
+**PRIOR** -> Previous(parent) level
+**LEVEL** -> The position (indentation) in the hierarchy of the current row in relation to the root node
+**ORDER SIBLINGS BY** -> Order of the rows which all shares the same parent row
+**CONNECT_BY_ROOT**-> To get the root node associated with the current row SYS_CONNECT_BY_PATH(column_name,'delimiter') -> Delimited break from the root node to the current row
+**CONNECT_BY_ISLEAF** -> 1 for leaf nodes and 0 for non-leaf nodes
+**CONNECT BY NOCYCLE** -> No to raise errors if loop exist. (Ex: KING is manager of BLAKE, BLAKE is manager of KING)
+
+```sql
+SELECTempno, ename, job, PRIORename --PRIOR ename = mgr name from previous level
+FROM emp
+START WITH mgr IS NULL
+CONNECT BYmgr = PRIOR empno;
+```
+
+```sql
+SELECT empno, ename, job, PRIOR ename
+FROM emp
+START WITH empno = 7566
+CONNECT BY mgr = PRIOR empno;
+```
+
+```sql
+SELECT LPAD('', LEVEL*2, '') ||family_member ASwho,
+mother,
+father
+FROMyour_family
+START WITHfamily_member in ('Aliyamma','Thomas') --level 1 of hierarchy
+CONNECT BY NOCYCLE PRIORfamily_member IN (mother,father) --PRIOR gives access to level above
+```

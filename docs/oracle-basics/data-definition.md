@@ -515,3 +515,16 @@ To drop this comment from the database, issue the following statement:
 ```sql
 COMMENT ON COLUMN employees.job_id IS ' ';
 ```
+
+## Database link
+
+- It is an object that enables you to access object on another database. The other databases need not to be an Oracle Database system.
+
+```sql
+CREATE [PUBLIC] DATABASE LINK link_name
+
+CONNECT TO remote_username IDENTIFIED BY remote_password
+USING 'hostname:port_number/SID' or 'TNS_Name'
+
+CREATE DATABASE LINK ACCDB CONNECT TO scott IDENTIFIED BY tiger USING 'DB1WORLD';
+```

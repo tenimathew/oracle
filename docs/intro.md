@@ -268,3 +268,154 @@ CREATE TABLE inventories
 [ot_drop.sql](sql-files/ot_drop.sql)
 
 [ot_schema.sql](sql-files/ot_schema.sql)
+
+## SDLC
+
+- Software development life cycle (SDLC) is a series of phases that provide a common understanding of the software building process.
+
+### Waterfall Model
+
+- The Waterfall Model is a linear sequential flow. In which progress is seen as flowing steadily downwards (like a waterfall) through the phases of software implementation.
+- This means that any phase in the development process begins only if the previous phase is complete. The waterfall approach does not define the process to go back to the previous phase to handle changes in requirement.
+- The waterfall approach is the earliest approach and most widely known that was used for software development.
+- The usage
+  - Projects which not focus on changing the requirements
+
+### V-Shaped Model
+
+- It is an extension of the waterfall model, Instead of moving down in a linear way, the process steps are bent upwards after the implementation and coding phase, to form the typical V shape. The major difference between the V-shaped model and waterfall model is the early test planning in the V-shaped model.
+- The usage
+
+  - Software requirements clearly defined and known
+  - Software development technologies and tools are well-known
+
+### Prototyping Model
+
+- It refers to the activity of creating prototypes of software applications, for example, incomplete versions of the software program being developed.
+- It is an activity that can occur in software development and It used to visualize some component of the software to limit the gap of misunderstanding the customer requirements by the development team.
+- This also will reduce the iterations may occur in the waterfall approach and hard to be implemented due to the inflexibility of the waterfall approach. So, when the final prototype is developed, the requirement is considered to be frozen.
+- The usage
+  - This process can be used with any software developing life cycle model. While this shall be chosen when you are developing a system has user interactions.
+  - So, if the system does not have user interactions, such as a system does some calculations shall not have prototypes.
+
+### Spiral Model (SDM)
+
+- It is combining elements of both design and prototyping-in-stages, in an effort to combine advantages of top-down and bottom-up concepts.
+- This model of development combines the features of the prototyping model and the waterfall model.
+- The spiral model is favored for large, expensive, and complicated projects.
+- This model uses many of the same phases as the waterfall model, in essentially the same order, separated by planning, risk assessment, and the building of prototypes and simulations.
+- The usage
+  - It is used in the large applications and systems which built-in small phases or segments.
+
+### Iterative and Incremental Model
+
+- It is developed to overcome the weaknesses of the waterfall model.
+- It starts with an initial planning and ends with deployment with the cyclic interactions in between.
+- The basic idea behind this method is to develop a system through repeated cycles (iterative) and in smaller portions at a time (incremental), allowing software developers to take advantage of what was learned during the development of earlier parts or versions of the system.
+- It can consist of mini waterfalls or mini V-Shaped model
+- The usage
+  - It is used in shrink-wrap application and large system which built-in small phases or segments.
+  - Also, can be used in a system has separated components, for example, ERP system.
+  - Which we can start with the budget module as a first iteration and then we can start with the inventory module and so forth.
+
+### Agile Model
+
+- It is based on iterative and incremental development, where requirements and solutions evolve through collaboration between cross-functional teams.
+- The usage
+  - It can be used with any type of the project, but it needs more engagement from the customer and to be interactive. Also, we can use it when the customer needs to have some functional requirement ready in less than three weeks and the requirements are not clear enough. This will enable more valuable and workable piece for software early which also increase the customer satisfaction.
+
+## Testing
+
+### Unit Testing (White-Box Testing) -Verification
+
+- It focuses on smallest unit of software design.
+- In this we test an individual unit or group of inter related units.
+- It is often done by programmer by using sample input and observing its corresponding outputs.
+- In this we focus on internal mechanism i.e. how the output is achieved.
+
+### System Testing (Black-Box Testing) (ST) -Validation
+
+- In this software is tested such that it works fine for different operating system.
+- In this we just focus on required input and output without focusing on internal working.
+
+### Alpha Testing (In-house Testing)
+
+- This testing performed by the test team and possibly other interested, friendly insiders.
+- The point of an Alpha Test is often to assess readiness of the system to be exposed to external stakeholders (such as customers).
+- Usually performed not by clients, but by internal testers.
+
+### Beta Testing
+
+- Testing conducted at one or more customer sites by the end-user of a software product or system .
+- This is usually a "friendly" user and the testing is conducted before the system is made generally available.
+- Usually performed by clients, sometimes with the help of internal testers.
+
+### User Acceptance Testing (UAT)
+
+- A formal product evaluation performed by a customer as a condition of purchase usually performed by clients.
+- This is carried out to determine whether the software satisfies its acceptance criteria and should be accepted by the customer.
+- User acceptance testing (UAT) is one of the final stages of a software project.
+- Often, once UAT is complete, the project is done, and payment is due.
+
+### Regression Testing
+
+- Every time new module is added leads to changes in program.
+- This type of testing make sure that whole component works properly even after adding components to the complete program.
+
+### Smoke Testing
+
+- This test is done to make sure that software under testing is ready or stable for further testing.
+- It is called smoke test as testing initial pass is done to check if it did not catch the fire or smoked in the initial switch on.
+
+### Stress Testing
+
+- In this we gives unfavorable conditions to the system and check how they perform in those condition.
+
+### Performance Testing
+
+- It is designed to test the run-time performance of software within the context of an integrated system. It is used to test speed and effectiveness of program.
+
+## The Basic Difference between SRS, BRS, CR, PR & FRS Documentation
+
+### SRS -System Requirement Specification:
+
+- It describes entire system flow, how data is going to flow into the system and overall functionality of the system.
+- SRS says brief about each module's functionality and doesn't include in-depth functionality of each page and module.
+- SRS documentation includes a set of use cases that explain all the interactions the users will have with the software. Use cases are also known as functional requirements.
+- In addition to use cases, the SRS also contain non-functional requirements.
+- NOTE: The Software Requirements Specification should contain descriptive labels for and references to every figure, table, and diagram included within the document.
+
+### BRS -Business Requirement Specification:
+
+- This document is called as high level document and includes the entire requirement demanded by the client.
+- Ideally, this document simply includes all the requirements should be part of proposed system.
+- BRS includes list of requirements which are demanded by the client and should be part of the proposed system.
+- Business Requirements Specification general Contents
+  - The purpose of the project
+  - The Client, the Customer, and other stakeholders
+  - Users of the product
+  - The scope of the work
+  - The scope of the product
+  - Features and Functionalities
+  - Usability and Humanity Requirements
+  - Performance Requirements
+
+### FRS -Functional Requirement Specification:
+
+- FRS includes requirements, converted into functionality and says that how this requirement is going to work as a part of a proposed system. FRS includes requirement converted into the way it is going to work as a part of proposed system.
+
+### Change Request (CR)
+
+- A change request is a document containing a call for an adjustment of a system; it is of great importance in the change management process. A change request is declarative, i.e. it states what needs to be accomplished, but leaves out how the change should be carried out.
+
+### Problem Report (PR)
+
+- A PR is a Problem Report. It's not only used for problems but as a way to track any user-submitted issues including bugs, ideas and patches related to the base system
+
+### What does SDR stand for?
+
+- SDR stands for Service Desk Request (computer support; various organizations)
+
+### What does RCA stand for?
+
+- Root cause analysis

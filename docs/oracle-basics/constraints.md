@@ -446,3 +446,91 @@ ENABLE CONSTRAINT unique_constraint_name;
 ALTER TABLE table_name
 DROP CONSTRAINT unique_constraint_name;
 ```
+
+## Normalization
+
+- It is a series of steps to obtain a database design that allows for efficient access and eliminate redundancy.
+
+### 1st Normal Form
+
+- Each cell of a table must contain atomic value.
+
+### 2nd Normal Form
+
+- Qualify 1st NF
+- Every non-prime attribute must be fully functional dependent on key; not part of key(composite key). (No partial dependency)
+- **Prime attribute**= part of key; **Non-Prime attribute**= which are not part of key
+
+```sql
+student_id+subject_id --primary key
+mark --dependent on student and subject_id
+teacher --only depend on subject; not student. Hence it is a partial dependent column
+```
+
+**Solution**: Move teacher name to subject table and use subject_id only
+**Solution**: Move teacher name to different table and use teacher_id
+
+### 3rd Normal Form
+
+- Qualify 2nd NF
+- All the attributes in a table are determined only by the candidate keys of that relation and not by any non-prime attributes (No transitive dependency)
+- 3NF data modeling was ideal for online transaction processing (OLTP) applications with heavy order entry type of needs.
+
+```sql
+student_id+subject_id --primary key
+mark --dependent on student and subject_id
+exam_name --dependent on student and subject. Ex. IT student will have Java exam
+total_marks --dependent on exam name. Total marks changes based on exam. Ex: Maths Total: 80, Biology: 40
+--But exam_name is not a part of Primary Key(non-prime). This is called transitive dependency.
+```
+
+**Solution**: Move exam_name and total_marks to a different table and use exam_id
+
+### BCNF (Boyce Codd Normal Form)
+
+- Qualify 3rd NF
+- It is a slightly stronger version of the third normal form (3NF)
+- For any dependency A derives B, A should be a super key( If A is non-prime attribute, it cannot derive B-a prime attribute)
+- Only in rare cases does a 3NF table not meet the requirements of BCNF.
+- A 3NF table that does not have multiple overlapping candidate keys is guaranteed to be in BCNF.
+
+```sql
+student_id+subject --primary key
+professor --non-prime attribute. professor can derive the subject which is a prime attribute. Professor is not a super key.
+```
+
+**Solution**: Move professor and subject to a different table and use professor_id
+
+### 4th Normal Form
+
+- Qualify BCNF
+- It should not have Multi-Valued dependency
+- Conditions for Multi-Valued dependency:
+  - A table should have at least 3 columns to have Multi-Valued dependency
+  - For A derives B, for a single value of A, more than one value of B exist
+  - For this table with A, B, C columns, B and C should be independent
+
+sid is deriving course and hobby (more than 1 value)
+
+| s_id | Course  | Hobby   |
+| ---- | ------- | ------- |
+| 1    | Science | Cricket |
+| 1    | Maths   | Hockey  |
+
+this two rows of data will give rise to two more rows of data
+
+| s_id | Course  | Hobby   |
+| ---- | ------- | ------- |
+| 1    | Science | Hockey  |
+| 1    | Maths   | Cricket |
+
+no relationship between course and hobby
+
+**Solution**:Move two columns (Course and Hobby) into two independent tables and use course_id and hobby_id
+
+## ACID property
+
+- **Atomicity**-“All or nothing” transactions
+- **Consistency**-Changes are consistent across the systems and objects
+- **Isolation**-Locking the row for concurrent write happens
+- **Durability**-Ability to recover lost data
