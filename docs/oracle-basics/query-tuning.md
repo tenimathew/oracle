@@ -716,3 +716,14 @@ CMD>TKPROF C:\APP\diag\rdbms\orcl\orcl\trace\orcl_ora_11512.trc E:\orcl_ora_1151
 - Inefficient statements are mostly associated with a high number of block visits.
 - Both, soft parse and hard parse are counted as parse in tkprof. More specifically, the parse count is incremented when the statement is hashed.
 - COUNT (\*) and COUNT(1) -No much difference in performance (just fraction of seconds)
+
+## Plan Stability
+
+- Plan stability relies on preserving execution plans at a point in time when performance is satisfactory.
+- In many environments, however, attributes for data types such as dates or order numbers can change rapidly.
+- In this cases, permanent use of an execution plan can result in performance degradation over time as the data characteristics change.
+- Plan stability preserves execution plans in stored outlines.
+- An outline is implemented as a set of optimizer hints that are associated with the SQL statement.
+- If the use of the outline is enabled for the statement, then Oracle Database automatically considers the stored hints and tries to generate an execution plan in accordance with those hints.
+- Oracle Database can create a public or private stored outline for one or all SQL statements. T
+- he optimizer then generates equivalent execution plans from the outlines when you enable the use of stored outlines.

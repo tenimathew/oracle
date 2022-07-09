@@ -366,3 +366,66 @@ FROMyour_family
 START WITHfamily_member in ('Aliyamma','Thomas') --level 1 of hierarchy
 CONNECT BY NOCYCLE PRIORfamily_member IN (mother,father) --PRIOR gives access to level above
 ```
+
+## CASE vs. DECODE
+
+- `DECODE` performs an equality check only. `CASE` is capable of other logical comparisons such as < > etc.
+- It is recommended to use CASE instead of `DECODE`
+- `DECODE` is oracle proprietary function; CASE is ANSI standard
+- `CASE` can be used in both SQL and PLSQL . But `DECODE` can be used only in SQL.
+- `CASE` can be used in `WHERE` clause But you cant use `DECODE` in `WHERE` clause.
+- `CASE` is Faster when compared to `DECODE` since `DECODE` is a function which takes time to load and run but the cost difference of `DECODE` and `CASE` is very very minimal.
+
+## SQL Injection
+
+SQL Injection is one of the techniques uses by hackers to hack a website by injecting SQL commands in data fields.
+
+```sql
+Ex1:In the username field in a webpage if a user types, Raj OR 1=1, the SQL statement for accepting this field will look like this.
+SELECT * FROM users WHERE username = ‘Raj’ OR 1 = 1;
+This will return all the rows in that table because 1 = 1 is always true.
+
+Ex2:
+Username: RAJ; DROP TABLE users
+SQL Statement: SELECT * FROM users WHERE username = ‘Raj’; DROP TABLE users;
+
+Ex3:
+l_query := 'SELECT claim_id, claim_amount FROM claims WHERE ssn =' || l_ssn;
+The user passes the following for the value l_ssn
+'123456789' UNION ALL SELECT claim_id, claim_amount FROM claims
+The value of the l_query variable is transformed to:
+SQL Statement: SELECT claim_id, claim_amount FROM claims WHERE ssn = '123456789' UNION ALL SELECT claim_id, claim_amount FROM claims
+```
+
+### Use the following approaches to avoid SQL injection vulnerabilities:
+
+- Never accept inputs from end user that you glue into a sql statement. They should be bound (bind variables) into the query not concatenated.
+- Validate user input
+- Use `AUTHID CURRENT_USER` while creating objects which will prevent the execution of object with privileges of owner
+
+## Calling External Procedures
+
+We can call C program or Java method from PLSQL. With external procedures, you can make "callouts" and "callbacks". Callout means a call to an external procedure. Callback means when the external procedure calls the database to perform SQL operations.
+
+```sql
+CREATE OR REPLACE PROCEDURE s_pr_upload(
+connectString IN VARCHAR2, dt_in_trd_date IN VARCHAR2, user IN VARCHAR2,
+numout_inserted OUT BINARY_INTEGER, numout_updated OUT BINARY_INTEGER,
+retCode OUT BINARY_INTEGER, prc_id IN VARCHAR2)
+AS
+EXTERNAL
+LANGUAGE C
+NAME "program_name"
+LIBRARY "DLL_name or shared_library_name"
+PARAMETERS(connectString,dt_in_trd_date,user,numout_inserted,numout_updated,retCode,prc_id);
+```
+
+## Oracle SALT
+
+- Oracle Service Architecture Leveraging Tuxedo (SALT) is an add-on product option for Oracle Tuxedo.
+- Oracle SALT allows external Web services applications to invoke Tuxedo services as Web services, and Tuxedo applications to invoke external Web services.
+- Oracle SALT does not require any coding to achieve this.
+- Oracle SALT complies with standard Web service specifications (SOAP 1.1, SOAP 1.2, and WSDL 1.1), allowing Oracle SALT to interoperate with other Web service products.
+- Web services are a set of functions packaged into a single entity made available to other systems on a network.
+- They can be shared and used as a component of distributed Web-based applications.
+- The network can be a corporate intranet or the Internet.

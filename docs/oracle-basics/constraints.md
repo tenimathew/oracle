@@ -534,3 +534,53 @@ no relationship between course and hobby
 - **Consistency**-Changes are consistent across the systems and objects
 - **Isolation**-Locking the row for concurrent write happens
 - **Durability**-Ability to recover lost data
+
+## Deferred Constraint
+
+- During large transactions involving multiple dependencies it is often difficult to process data efficiently due to the restrictions imposed by the constraints.
+- An example of this would be the update of a primary key (PK) which is referenced by foreign keys (FK).
+- The primary key columns cannot be updated as this would orphan the dependant tables, and the dependant tables cannot be updated prior to the parent table as this would also make them orphans.
+- Traditionally this problem was solved by disabling the foreign key constraints or deleting the original records and recreating them.
+- Since neither of these solutions is particularly satisfactory Oracle 8i includes support for deferred constraints.
+- A deferred constraint is only checked at the point the transaction is committed.
+- By default constraints are created as `NON DEFERRABLE` but this can be overridden using the `DEFERRABLE` keyword.
+- A deferred constraint is one that is enforced when a transaction is committed.
+- A deferrable constraint is specified by using `DEFERRABLE` clause.
+- Once you've added a constraint, you cannot change it to `DEFERRABLE`. You must drop and recreate the constraint.
+- When you add a `DEFERRABLE` constraint, you can mark it as `INITIALLY IMMEDIATE` or `INITIALLY DEFERRED`.
+- `INITIALLY IMMEDIATE` means that the constraint is checked whenever you add, update, or delete rows from a table.
+- `INITIALLY DEFERRED` means that the constraint is only checked when a transaction is committed.
+
+```sql
+ALTER TABLE cust
+    ADD CONSTRAINT cust_id_pk
+    PRIMARY KEY(cust_id) DEFERRABLE INITIALLY DEFERRED;
+
+ALTER SESSION SET CONSTRAINTS = DEFERRED;
+ALTER SESSION SET CONSTRAINTS = IMMEDIATE;
+```
+
+- The `ALTER SESSION`... statements show how the state of the constraint can be changed. These `ALTER SESSION`... statements will not work for constraints that are created as `NOT DEFERRABLE`
+
+## Constraint States
+
+- Table constraints can be enabled and disabled using the `CREATE TABLE` or `ALTER TABLE` statement. In addition the VALIDATE or `NOVALIDATE` keywords can be used to alter the action of the state.
+- `ENABLE VALIDATE` is the same as `ENABLE`. The constraint is checked and is guaranteed to hold for all rows.
+- `ENABLE NOVALIDATE` means the constraint is checked for new or modified rows, but existing data may violate the constraint.
+- `DISABLE NOVALIDATE` is the same as `DISABLE`. The constraint is not checked so data may violate the constraint.
+- `DISABLE VALIDATE` means the constraint is not checked but disallows any modification of the constrained columns.
+
+```sql
+ALTER TABLE tab1 ADD CONSTRAINT fk_tab1_tab2
+FOREIGN KEY (tab2_id)
+REFERENCES tab2 (id)
+ENABLE NOVALIDATE;
+ALTER TABLE tab1 MODIFY CONSTRAINTS fk_tab1_tab2 ENABLE VALIDATE;
+```
+
+### Issues
+
+Exception handling has to be coded carefully as statements will not trigger exceptions directly. Often exceptions will only be picked up by the outermost exception handler which encloses the commit statement.
+
+- Converting a `NOVALIDATE` constraint to `VALIDATE` may take a long time depending on the amount of data to be validated, although conversion in the other direction is not an issue.
+- Enabling a unique or primary key constraint when no index is present causes the creation of a unique index. Likewise, disabling a unique or primary key will drop a unique index that it used to enforce it.

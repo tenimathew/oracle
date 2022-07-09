@@ -399,3 +399,152 @@ BEGIN
     END LOOP;
 END;
 ```
+
+## Wrapped
+
+- Wrapping is the process of hiding PL/SQL source code.
+- Wrapping helps to protect your source code from business competitors and others who might misuse it.
+- Wrapped source files can be moved, backed up, and processed by SQL*Plus and the Import and Export utilities, but they are not visible through the static data dictionary views *\_SOURCE.
+- You cannot edit PL/SQL source code inside wrapped files. Either wrap your code after it is ready to ship to users or include the wrapping operation as part of your build environment.
+- To change wrapped PL/SQL code, edit the original source file and then wrap it again.
+- Wrapping is not a secure method for hiding passwords or table names.
+- To hide the workings of a trigger, write a one-line trigger that invokes a wrapped subprogram.
+- Wrapping does not detect syntax or semantic errors.
+- Wrapped PL/SQL units are not downward-compatible.
+
+```sql
+CMD> wrap iname="wrap_test.sql" --wrap_test.sql is the file name of a procedure (no space between the equal sign)
+PL/SQL Wrapper: Release 18.0.0.0.0 -Production on Thu Aug 1 16:26:09 2019
+Version 18.3.0.0.0
+Copyright (c) 1982, 2018, Oracle and/or its affiliates. All rights reserved.
+Processing wrap_test.sql to wrap_test.plb --output file
+SQL> @wrap_test.plb
+SQL> call wraptest();
+----
+DECLARE
+    PACKAGE_TEXT VARCHAR2(32767) := 'CREATE PACKAGE emp_actions AS
+    PROCEDURE raise_salary (emp_id NUMBER, amount NUMBER);
+    PROCEDURE fire_employee (emp_id NUMBER);
+END emp_actions;';
+
+BEGIN
+    DBMS_DDL.CREATE_WRAPPED(PACKAGE_TEXT);
+END;
+```
+
+## High Water Mark
+
+- This is a term used with table segments stored in the database.
+- If you envision a table, for example, as a 'flat' structure or as a series of blocks laid one after the other in a line from left to right, the high-water mark (HWM) would be the rightmost block that ever contained data.
+- HWM starts at the first block of a newly created table. As data is placed into the table over time and more blocks get used, the HWM rises.
+- If we delete some (or even all) of the rows in the table, we might have many blocks that no longer contain data, but they are still under the HWM, and they will remain under the HWM until the object is rebuilt, truncated, or shrunk.
+
+## DBMS Packages
+
+### DBMS_SQL
+
+The DBMS_SQL package provides an interface to use dynamic SQL to parse any data manipulation language (DML) or data definition language (DDL) statement using PL/SQL. Native Dynamic SQL is an alternative to DBMS_SQL that lets you place dynamic SQL statements directly into PL/SQL blocks. In most situations, Native Dynamic SQL is easier to use and performs better than `DBMS_SQL`. However, Native Dynamic SQL itself has certain limitations
+
+**DBMS_SQL.NATIVE** --Specifies normal behaviour for the database to which the program is connected. Can define behaviour as in Oracle version 6 and 7
+**DBMS_SQL.OPEN_CURSOR**
+**DBMS_SQL.PARSE** --Parsing the statement checks the statement's syntax and associates it with the cursor in your program. You can parse any DML or DDL statement. DDL statements are run on the parse, which performs the implied commit.
+**DBMS_SQL.BIND_VARIABLE**
+**DBMS_SQL.DEFINE_COLUMN** --The columns of the row being selected in a `SELECT` statement are identified by their relative positions as they appear in the select list, from left to right
+**DBMS_SQL.EXECUTE** --Call the EXECUTE function to run your SQL statement.
+**DBMS_SQL.FETCH_ROWS** --The `FETCH_ROWS` function retrieves the rows that satisfy the query.
+**DBMS_SQL.COLUMN_VALUE** --call `COLUMN_VALUE` after fetching rows to actually retrieve the values of the columns in the rows into your program
+**DBMS_SQL.VARIABLE_VALUE** --call `VARIABLE_VALUE` to retrieve the value of an OUT parameter for an anonymous block
+**DBMS_SQL.CLOSE_CURSOR**
+
+## DBMS_RANDOM
+
+The `DBMS_RANDOM` package provides a built-in random number generator. DBMS_RANDOM is not intended for cryptography.
+**DBMS_RANDOM.VALUE**(low_value,high_value) --gets a random number with 38 digit decimal
+**DBMS_RANDOM.STRING**(single_character,length) --This function gets a random string.
+
+**DBMS_LOCK.SLEEP(120)** --This procedure suspends the session for a given period of time (seconds).
+
+**DBMS_UTILITY.FORMAT_ERROR_BACKTRACE** --This procedure displays the call stack at the point where an exception was raised
+**DBMS_UTILITY.GET_TIME** --This function determines the current time in 100th's of a second. This subprogram is primarily used for determining elapsed time. The subprogram is called twice –at the beginning and end of some process –and then the first (earlier) number is subtracted from the second (later) number to determine the time elapsed.
+**DBMS_UTILITY.GET_CPU_TIME** --CPU time
+
+**DBMS_OUTPUT.PUT_LINE**
+**DBMS_OUTPUT.PUT_LINE($$PLSQL_LINE);** --Displays line number
+**DBMS_OUTPUT.DISABLE**
+
+**DBMS_STATS.GATHER_TABLE_STATS** --This procedure gathers table and column (and index) statistics.
+EXEC DBMS_STATS.GATHER_SCHEMA_STATS(USER, CASCADE => TRUE);
+
+**DBMS_XPLAN.DISPLAY** --to format and display the contents of a plan table.
+**DBMS_XPLAN.DISPLAY_AWR** --to format and display the contents of the execution plan of a stored SQL statement in the AWR.
+**DBMS_XPLAN.DISPLAY_CURSOR** --to format and display the contents of the execution plan of any loaded cursor.
+
+**DBMS_METADATA.GET_DDL**
+SELECT DBMS_METADATA.GET_DDL ('TABLE', 'EMPLOYEES', 'HR') FROM DUAL;
+--to get DDL for a view just replace first argument with ‘VIEW’ and second with your view name and so.
+
+**DBMS_REFRESH.ADD** --Adds materialized views to a refresh group.
+**DBMS_REFRESH.MAKE** --To make materialized view refresh group
+**DBMS_REFRESH.CHANGE** --Changes the refresh interval for a refresh group.
+**DBMS_REFRESH.DESTROY** --Removes all of the materialized views from a refresh group and deletes the refresh group.
+**DBMS_REFRESH.REFRESH** --Manually refreshes a refresh group.
+**DBMS_REFRESH.SUBTRACT** --Removes materialized views from a refresh group.
+
+**DBMS_MVIEW.REFRESH** --Refreshes one or more materialized views that are not members of the same refresh group
+**DBMS_MVIEW.REFRESH_ALL_MVIEWS** --Refreshes all materialized views
+
+## Table Clusters
+
+- A table cluster is a group of tables that share common columns and store related data in the same blocks.
+- When tables are clustered, a single data block can contain rows from multiple tables. For example, a block can store rows from both the employees and departments tables rather than from only a single table.
+- The cluster key is the column or columns that the clustered tables have in common. For example, the employees and departments tables share the department_id column. You specify the cluster key when creating the table cluster and when creating every table added to the table cluster.
+- The cluster key value is the value of the cluster key columns for a particular set of rows. All data that contains the same cluster key value, such as department_id=20, is physically stored together.
+- Consider clustering tables when they are primarily queried (but not modified) and records from the tables are frequently queried together or joined. This benefits reduced Disk I/O for joins, improves access time for joins.
+- Flashback Table operation is not supported on clustered tables
+
+```sql
+/*For example to create a cluster of EMP and DEPT tables in which the DEPTNO will be cluster key, first create the cluster by typing the following command.*/
+CREATE CLUSTER emp_dept (deptno NUMBER(2));
+
+/*Then create index on it.*/
+CREATE INDEX idx_empdept ON CLUSTER emp_dept;
+
+/*Now create table in the cluster like this*/
+CREATE TABLE dept (deptno NUMBER(2),
+    name VARCHAR2(20),
+    loc VARCHAR2(20))
+    CLUSTER emp_dept (deptno);
+    CREATE TABLE emp (empno NUMBER(5),
+    name VARCHAR2(20),
+    sal NUMBER(10,2),
+    deptno NUMBER(2))
+
+CLUSTER emp_dept (deptno);
+```
+
+## NOCOPY
+
+- By default OUT and IN OUT parameters are passed by value and IN parameters are passed by reference.
+- When an OUT or IN OUT parameter is modified inside the procedure the procedure actually only modifies a copy of the parameter value.
+- Only when the procedure has finished without exception is the result value copied back to the formal parameter.
+- Now, if you pass a large collection as an OUT or an IN OUT parameter then it will be passed by value, in other words the entire collection will be copied to the formal parameter when entering the procedure and back again when exiting the procedure.
+- If the collection is large this can lead to unnecessary CPU and memory consumption.
+- The `NOCOPY` hint alleviates this problem because you can use it to instruct the runtime engine to try to pass OUT or IN OUT parameters by reference instead of by value. For example:
+
+```sql
+PROCEDURE GET_CUSTOMER_ORDERS(
+    P_CUSTOMER_ID IN NUMBER,
+    P_ORDERS OUT NOCOPY ORDERS_COLL
+    );
+
+THEORDERS ORDERS_COLL;
+
+GET_CUSTOMER_ORDERS(124, THEORDERS);
+```
+
+- In the absence of the NOCOPY hint the entire orders collection would have been copied into the orders variable upon exit from the procedure.
+- Instead the collection is now passed by reference.
+- Keep in mind, however, that there is a downside to using NOCOPY.
+- When you pass parameters to a procedure by reference then any modifications you perform on the parameters inside the procedure is done on the same memory location as the actual parameter, so the modifications are visible.
+- In other words, there is no way to ?undo? or ?rollback? these modifications, even when an exception is raised midway.
+- So if an exception is raised inside the procedure the value of the parameter is ?undefined? and cannot be trusted.
