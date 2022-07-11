@@ -78,7 +78,7 @@ BEGIN
 END;
 ```
 
-- You cannot use a `GOTO` statement to transfer control into an `IF`, `CASE` or `LOOP` statement, the same for sub-block.
+- You cannot use a `GOTO` statement to transfer control _into an_ `IF`, `CASE` or `LOOP` statement, the same for sub-block.
 - The following example attempts to transfer control into an `IF` statement using a `GOTO` statement:
 
 ```sql

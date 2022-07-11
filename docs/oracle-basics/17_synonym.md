@@ -1,6 +1,6 @@
 ---
-id: Section 16. Synonym, Sequence
-sidebar_position: 16
+id: Section 17. Synonym, Sequence
+sidebar_position: 17
 description: Synonym, Sequence
 ---
 

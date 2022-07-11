@@ -1,6 +1,6 @@
 ---
-id: Section 12. Constraints
-sidebar_position: 12
+id: Section 13. Constraints
+sidebar_position: 13
 description: PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK
 ---
 

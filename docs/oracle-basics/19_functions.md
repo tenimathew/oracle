@@ -1,6 +1,6 @@
 ---
-id: Section 18. Functions
-sidebar_position: 18
+id: Section 19. Functions
+sidebar_position: 19
 description: Aggregate Functions, Analytical Functions...
 ---
 

@@ -1,6 +1,6 @@
 ---
-id: Section 14. View
-sidebar_position: 14
+id: Section 15. View
+sidebar_position: 15
 description: View, Materialized View
 ---
 

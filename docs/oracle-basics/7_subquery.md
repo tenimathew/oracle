@@ -1,6 +1,6 @@
 ---
-id: Section 6. Subquery
-sidebar_position: 6
+id: Section 7. Subquery
+sidebar_position: 7
 description: EXISTS, ANY, SOME, ALL
 ---
 

@@ -1,6 +1,6 @@
 ---
-id: Section 3. Filtering data
-sidebar_position: 3
+id: Section 4. Filtering data
+sidebar_position: 4
 description: DISTINCT, WHERE, FETCH, Operators, CASE
 ---
 

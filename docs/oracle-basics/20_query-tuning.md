@@ -1,6 +1,6 @@
 ---
-id: Section 19. Query Tuning
-sidebar_position: 19
+id: Section 20. Query Tuning
+sidebar_position: 20
 description: Query Tuning
 ---
 

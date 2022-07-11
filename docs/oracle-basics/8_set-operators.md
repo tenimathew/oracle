@@ -1,6 +1,6 @@
 ---
-id: Section 7. Set Operators
-sidebar_position: 7
+id: Section 8. Set Operators
+sidebar_position: 8
 description: UNION, INTERSECT, MINUS
 ---
 

@@ -1,6 +1,6 @@
 ---
-id: Section 9. Modifying data
-sidebar_position: 9
+id: Section 10. Modifying data
+sidebar_position: 10
 description: INSERT, UPDATE, DELETE, MERGE
 ---
 

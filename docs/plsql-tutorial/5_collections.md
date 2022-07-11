@@ -1,6 +1,6 @@
 ---
-id: Section 6. Collections
-sidebar_position: 6
+id: Section 5. Collections
+sidebar_position: 5
 description: Collections
 ---
 

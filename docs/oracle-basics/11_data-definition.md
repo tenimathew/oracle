@@ -1,6 +1,6 @@
 ---
-id: Section 10. Data definition
-sidebar_position: 10
+id: Section 11. Data definition
+sidebar_position: 11
 description: CREATE, ALTER, DROP, TRUNCATE, RENAME, PURGE, COMMENT
 ---
 

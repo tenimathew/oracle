@@ -1,6 +1,6 @@
 ---
-id: Section 2. Sorting data
-sidebar_position: 2
+id: Section 3. Sorting data
+sidebar_position: 3
 description: ORDER BY, ALIAS
 ---
 

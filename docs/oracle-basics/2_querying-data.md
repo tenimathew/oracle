@@ -1,7 +1,6 @@
 ---
-slug: /
-id: Section 1. Querying data
-sidebar_position: 1
+id: Section 2. Querying data
+sidebar_position: 2
 description: SELECT, DUAL
 ---
 

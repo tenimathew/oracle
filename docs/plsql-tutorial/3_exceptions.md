@@ -13,12 +13,12 @@ description: Exception Handling
 
 ## Predefined Exceptions
 
-**NO_DATA_FOUND**-It is raised when a SELECT INTO statement returns no rows.
-**PROGRAM_ERROR**-It is raised when PL/SQL has an internal problem.
-**TOO_MANY_ROWS**-It is raised when a SELECT INTO statement returns more than one row.
-**VALUE_ERROR**-It is raised when an arithmetic, conversion, truncation, or size constraint error occurs.
-**ZERO_DIVIDE**-It is raised when an attempt is made to divide a number by zero.
-**DUP_VAL_ON_INDEX**-Unique constraint error
+- **NO_DATA_FOUND**-It is raised when a SELECT INTO statement returns no rows.
+- **PROGRAM_ERROR**-It is raised when PL/SQL has an internal problem.
+- **TOO_MANY_ROWS**-It is raised when a SELECT INTO statement returns more than one row.
+- **VALUE_ERROR**-It is raised when an arithmetic, conversion, truncation, or size constraint error occurs.
+- **ZERO_DIVIDE**-It is raised when an attempt is made to divide a number by zero.
+- **DUP_VAL_ON_INDEX**-Unique constraint error
 
 ## Exception Declaration
 

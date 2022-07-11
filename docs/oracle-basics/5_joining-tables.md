@@ -1,6 +1,6 @@
 ---
-id: Section 4. Joining tables
-sidebar_position: 4
+id: Section 5. Joining tables
+sidebar_position: 5
 description: JOIN
 ---
 

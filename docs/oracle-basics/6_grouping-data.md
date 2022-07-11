@@ -1,6 +1,6 @@
 ---
-id: Section 5. Grouping data
-sidebar_position: 5
+id: Section 6. Grouping data
+sidebar_position: 6
 description: GROUP BY, HAVING
 ---
 

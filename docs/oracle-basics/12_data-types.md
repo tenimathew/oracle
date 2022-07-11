@@ -1,6 +1,6 @@
 ---
-id: Section 11. Datatypes
-sidebar_position: 11
+id: Section 12. Datatypes
+sidebar_position: 12
 description: NUMBER, VARCHAR2, NVARCHAR
 ---
 

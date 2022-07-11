@@ -1,6 +1,6 @@
 ---
-id: Section 8. More on Groupings
-sidebar_position: 8
+id: Section 9. More on Groupings
+sidebar_position: 9
 description: CUBE, ROLLUP, PIVOT, UNPIVOT
 ---
 

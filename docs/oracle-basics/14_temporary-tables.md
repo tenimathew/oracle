@@ -1,6 +1,6 @@
 ---
-id: Section 13. Temporary Tables
-sidebar_position: 13
+id: Section 14. Temporary Tables
+sidebar_position: 14
 description: Global temporary table, Private temporary table
 ---
 
