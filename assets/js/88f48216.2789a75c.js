@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoracle=self.webpackChunkoracle||[]).push([[478],{8495:function(e){e.exports=JSON.parse('{"title":"Oracle - Basics","slug":"/category/oracle---basics","permalink":"/oracle/category/oracle---basics","navigation":{"next":{"title":"Intro","permalink":"/oracle/oracle-basics/Intro"}}}')}}]);
