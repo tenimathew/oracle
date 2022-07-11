@@ -223,6 +223,151 @@ BEGIN
 END;
 ```
 
+## Implicit Statement
+
+- Prior Oracle Database 12c, you can return a result set from a stored procedure using the OUT REF CURSOR parameters.
+- To make the migration of other databases to the Oracle Database easier, Oracle Database 12c Release 1 added a new feature called implicit statement result that allows you to return one or more result sets from a stored procedure by using the dbms_sql package.
+- The following statement creates a stored procedure that returns customers who have credit limits are greater than a specific credit:
+
+```sql
+CREATE OR REPLACE PROCEDURE get_customer_by_credit(
+    min_credit NUMBER
+)
+AS
+    c_customers SYS_REFCURSOR;
+BEGIN
+    -- open the cursor
+    OPEN c_customers FOR
+        SELECT customer_id, credit_limit, name
+        FROM customers
+        WHERE credit_limit > min_credit
+        ORDER BY credit_limit;
+    -- return the result set
+    dbms_sql.return_result(c_customers);
+END;
+```
+
+In this stored procedure:
+
+- First, declare a cursor with type SYS_REFCURSOR in the declaration section.
+- Second, open the cursor associated with a query.
+- Third, use the dbms_sql.return_result() function which accepts a cursor as an argument and returns the result set.
+- To test the stored procedure, you can execute it as follows:
+
+```sql
+EXEC get_customer_by_credit(5000);
+```
+
+![](img/2022-07-09-22-05-18.png)
+
+- The following statement creates a stored procedure that returns the customer result set by pages specified by page no and page size. On top of that, it returns the total rows of the customers table.
+
+```sql
+CREATE OR REPLACE PROCEDURE get_customers(
+    page_no NUMBER,
+    page_size NUMBER
+)
+AS
+    c_customers SYS_REFCURSOR;
+    c_total_row SYS_REFCURSOR;
+BEGIN
+    -- return the total of customers
+    OPEN c_total_row FOR
+        SELECT COUNT(*)
+        FROM customers;
+
+    dbms_sql.return_result(c_total_row);
+
+    -- return the customers
+    OPEN c_customers FOR
+        SELECT customer_id, name
+        FROM customers
+        ORDER BY name
+        OFFSET page_size * (page_no - 1) ROWS
+        FETCH NEXT page_size ROWS ONLY;
+
+    dbms_sql.return_result(c_customers);
+END;
+```
+
+![](img/2022-07-09-22-06-28.png)
+
+- It returned two result sets. The first result set is the total rows of the customers table. The second one is the first 10 customers in the page 1.
+
+- Typically, you process result sets returned by a procedure using client programming languages such as Python, C#, and Java.
+- However, if you want to process result sets using PL/SQL, you can use the get_next_resultset() procedure in the DBMS_SQL package.
+- The following anonymous block calls the get_customers() procedure and uses the get_next_resultset() procedure to process the result sets.
+- Since the get_customers() returns multiple result sets, we handle the result sets based on their number of columns.
+
+```sql
+SET SERVEROUTPUT ON
+
+DECLARE
+l_sql_cursor    PLS_INTEGER;
+c_cursor        SYS_REFCURSOR;
+l_return        PLS_INTEGER;
+
+l_column_count  PLS_INTEGER;
+l_desc_tab      dbms_sql.desc_tab;
+
+l_total_rows    NUMBER;
+l_customer_id   customers.customer_id%TYPE;
+l_name          customers.NAME%TYPE;
+BEGIN
+-- Execute the function.
+l_sql_cursor := dbms_sql.open_cursor(treat_as_client_for_results => TRUE);
+
+dbms_sql.parse(C             => l_sql_cursor,
+                STATEMENT     => 'BEGIN get_customers(1,10); END;',
+                language_flag => dbms_sql.NATIVE);
+
+l_return := dbms_sql.EXECUTE(l_sql_cursor);
+
+-- Loop over the result sets.
+LOOP
+    -- Get the next resultset.
+    BEGIN
+    dbms_sql.get_next_result(l_sql_cursor, c_cursor);
+    EXCEPTION
+    WHEN no_data_found THEN
+        EXIT;
+    END;
+
+    -- Get the number of columns in each result set.
+    l_return := dbms_sql.to_cursor_number(c_cursor);
+    dbms_sql.describe_columns (l_return, l_column_count, l_desc_tab);
+    c_cursor := dbms_sql.to_refcursor(l_return);
+
+    -- Handle the result set based on the number of columns.
+    CASE l_column_count
+    WHEN 1 THEN
+        dbms_output.put_line('The total number of customers:');
+        FETCH c_cursor
+        INTO  l_total_rows;
+
+        dbms_output.put_line(l_total_rows);
+        CLOSE c_cursor;
+    WHEN 2 THEN
+        dbms_output.put_line('The customer list:');
+        LOOP
+        FETCH c_cursor
+        INTO  l_customer_id, l_name;
+
+        EXIT WHEN c_cursor%notfound;
+
+        dbms_output.put_line(l_customer_id || ' ' || l_name);
+        END LOOP;
+        CLOSE c_cursor;
+    ELSE
+        dbms_output.put_line('An error occurred!');
+    END CASE;
+END LOOP;
+END;
+/
+```
+
+![](img/2022-07-09-22-07-09.png)
+
 ## CURSOR vs. REF CURSOR
 
 | REF CURSOR                                                             | CURSOR                                                                                                    |
