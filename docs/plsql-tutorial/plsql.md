@@ -439,13 +439,10 @@ END;
 
 ## DBMS Packages
 
-### DBMS_SQL
-
 - The DBMS_SQL package provides an interface to use dynamic SQL to parse any data manipulation language (DML) or data definition language (DDL) statement using PL/SQL.
 - Native Dynamic SQL is an alternative to DBMS_SQL that lets you place dynamic SQL statements directly into PL/SQL blocks.
 - In most situations, Native Dynamic SQL is easier to use and performs better than `DBMS_SQL`.
 - However, Native Dynamic SQL itself has certain limitations
-
 - **DBMS_SQL.NATIVE** --Specifies normal behaviour for the database to which the program is connected. Can define behaviour as in Oracle version 6 and 7
 - **DBMS_SQL.OPEN_CURSOR**
 - **DBMS_SQL.PARSE** --Parsing the statement checks the statement's syntax and associates it with the cursor in your program. You can parse any DML or DDL statement. DDL statements are run on the parse, which performs the implied commit.
@@ -457,15 +454,14 @@ END;
 - **DBMS_SQL.VARIABLE_VALUE** --call `VARIABLE_VALUE` to retrieve the value of an OUT parameter for an anonymous block
 - **DBMS_SQL.CLOSE_CURSOR**
 
-## DBMS_RANDOM
-
 - The `DBMS_RANDOM` package provides a built-in random number generator. DBMS_RANDOM is not intended for cryptography.
 - **DBMS_RANDOM.VALUE**(low_value,high_value) --gets a random number with 38 digit decimal
 - **DBMS_RANDOM.STRING**(single_character,length) --This function gets a random string.
 
 - **DBMS_LOCK.SLEEP(120)** --This procedure suspends the session for a given period of time (seconds).
 
-- **DBMS_UTILITY.FORMAT_ERROR_BACKTRACE** --This procedure displays the call stack at the point where an exception was raised
+- **DBMS_UTILITY.FORMAT_ERROR_BACKTRACE** --This function displays the call stack at the point where an exception was raised, even if the subprogram is called from an exception handler in an outer scope
+- **DBMS_UTILITY.FORMAT_ERROR_STACK** - This function formats the current error stack. This can be used in exception handlers to look at the full error stack. SQLERRM in principle gives the same info as FORMAT_ERROR_STACK. But SQLERRM is subject to some length limits, while FORMAT_ERROR_STACK is not.
 - **DBMS_UTILITY.GET_TIME**
   -This function determines the current time in 100th's of a second.
   - This subprogram is primarily used for determining elapsed time.
