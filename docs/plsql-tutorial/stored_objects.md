@@ -56,9 +56,36 @@ EXECUTE greetings('Mohan',place=>'Mumbai',age=>26); --Mixed -Positioned notation
 
 ## Parameter Modes
 
-IN: [default mode] An IN parameter lets you pass a value to the subprogram. It is a read-only parameter. Inside the subprogram, an IN parameter acts like a constant. Its value cannot be changed. IN can have default value; but others cannot. In can pass expressions like (10+5) or constant. But other must be a variable. Parameters are passed by reference.
-OUT: An OUT parameter returns a value to the calling program. Its value can be changed. Parameters are passed by value.
-INOUT: An INOUT parameter passes an initial value to a subprogram and returns an updated value to the caller. Its value can be changed. Parameters are passed by value.
+- **IN**: [default mode] An IN parameter lets you pass a value to the subprogram. It is a read-only parameter. Inside the subprogram, an IN parameter acts like a constant. Its value cannot be changed. IN can have default value; but others cannot. In can pass expressions like (10+5) or constant. But other must be a variable. Parameters are passed by reference.
+- **OUT**: An OUT parameter returns a value to the calling program. Its value can be changed. Parameters are passed by value.
+- **INOUT**: An INOUT parameter passes an initial value to a subprogram and returns an updated value to the caller. Its value can be changed. Parameters are passed by value.
+
+## NOCOPY
+
+- By default OUT and IN OUT parameters are passed by value and IN parameters are passed by reference.
+- When an OUT or IN OUT parameter is modified inside the procedure the procedure actually only modifies a copy of the parameter value.
+- Only when the procedure has finished without exception is the result value copied back to the formal parameter.
+- Now, if you pass a large collection as an OUT or an IN OUT parameter then it will be passed by value, in other words the entire collection will be copied to the formal parameter when entering the procedure and back again when exiting the procedure.
+- If the collection is large this can lead to unnecessary CPU and memory consumption.
+- The `NOCOPY` hint alleviates this problem because you can use it to instruct the runtime engine to try to pass OUT or IN OUT parameters by reference instead of by value. For example:
+
+```sql
+PROCEDURE GET_CUSTOMER_ORDERS(
+    P_CUSTOMER_ID IN NUMBER,
+    P_ORDERS OUT NOCOPY ORDERS_COLL
+    );
+
+THEORDERS ORDERS_COLL;
+
+GET_CUSTOMER_ORDERS(124, THEORDERS);
+```
+
+- In the absence of the NOCOPY hint the entire orders collection would have been copied into the orders variable upon exit from the procedure.
+- Instead the collection is now passed by reference.
+- Keep in mind, however, that there is a downside to using NOCOPY.
+- When you pass parameters to a procedure by reference then any modifications you perform on the parameters inside the procedure is done on the same memory location as the actual parameter, so the modifications are visible.
+- In other words, there is no way to ?undo? or ?rollback? these modifications, even when an exception is raised midway.
+- So if an exception is raised inside the procedure the value of the parameter is ?undefined? and cannot be trusted.
 
 ## Procedure Vs. Function
 
