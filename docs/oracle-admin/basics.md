@@ -31,6 +31,20 @@ description: Basics
 - The datafiles are created automatically when the tablespace is defined.
 - When you create a tablespace, you define the initial size of the associated datafile.
 
+```sql
+SELECT PROPERTY_VALUE FROM DATABASE_PROPERTIES
+WHERE PROPERTY_NAME = 'DEFAULT_PERMANENT_TABLESPACE';
+----
+SELECT PROPERTY_VALUE FROM DATABASE_PROPERTIES
+WHERE PROPERTY_NAME = 'DEFAULT_TEMP_TABLESPACE';
+----
+ALTER DATABASE DEFAULT TABLESPACE tbs_perm_01;
+ALTER DATABASE DEFAULT TEMPORARY TABLESPACE tbs_temp_01;
+----
+CREATE TABLE tbl_tblspace (value1 NUMBER(2))
+TABLESPACE SYSTEM;
+```
+
 ## Types of Tablespaces
 
 - `SYSTEM` and `SYSAUX` tablespaces are always created when the database is created.
@@ -50,20 +64,10 @@ description: Basics
 
 ### Undo Tablespace
 
-Oracle Database keeps records of actions of transactions, before they are committed. These information are used to rollback or undo the changes to the database. These records are calledrollback or undo records.
+Oracle Database keeps records of actions of transactions, before they are committed. These information are used to rollback or undo the changes to the database. These records are called rollback or undo records.
 
 - When the instance starts up, the database automatically selects for use the first available undo tablespace. If there is no undo tablespace available, the instance starts, but uses the `SYSTEM` rollback segment for undo. This is not recommended, and an alert message is written to the alert log file to warn that the system is running without an undo tablespace.
 - Committed undo information normally is lost when its undo space is overwritten by a newer transaction.
-- The default value for the `UNDO_RETENTION` parameter is 900 seconds. The system retains undo for at least the time specified in this parameter.
-- You can set the `UNDO_RETENTION` in the parameter file: `UNDO_RETENTION = 1800`
-
-```sql
-SQL>ALTER SYSTEM SET UNDO_RETENTION = 2400;
-```
-
-- You can set `RETENTION` clause to either `GUARANTEE` or `NOGUARANTEE`.
-- It specifies the database should preserve the unexpired undo data. This setting is useful if you need to issue an Oracle Flashback Queryto correct a problem with the data.
-- `RETENTION NOGUARANTEE` returns the undo behavior to normal.
 - Space occupied by unexpired undo data in undo segments can be consumed if necessary by ongoing transactions. This is the default.
 - You can create more than one undo tablespace but only one of them can be active at any given time.
 
@@ -74,65 +78,6 @@ SQL>ALTER SYSTEM SET UNDO_RETENTION = 2400;
 ### Big-file Tablespace
 
 - Suited for storing large amount of data. Allows maximum 1 data file
-
-```sql
-SELECT PROPERTY_VALUE FROM DATABASE_PROPERTIES
-WHERE PROPERTY_NAME = 'DEFAULT_PERMANENT_TABLESPACE';
-----
-SELECT PROPERTY_VALUE FROM DATABASE_PROPERTIES
-WHERE PROPERTY_NAME = 'DEFAULT_TEMP_TABLESPACE';
-----
-ALTER DATABASE DEFAULT TABLESPACE tbs_perm_01;
-ALTER DATABASE DEFAULT TEMPORARY TABLESPACE tbs_temp_01;
-----
-CREATE TABLE tbl_tblspace (value1 NUMBER(2))
-TABLESPACE SYSTEM;
-```
-
-```sql
-CREATE SMALLFILE TEMPORARY TABLESPACE tblspce
-TEMPFILE 'C:\oraclexe\app\oracle\oradata\XE\dtlfle1.dbf'SIZE 100M,
-'C:\oraclexe\app\oracle\oradata\XE\dtlfle2.dbf' SIZE 100M
-AUTOEXTEND ON NEXT 500M
-MAXSIZE UNLIMITED
-EXTENT MANAGEMENT LOCAL UNIFORM SIZE 25M;
-----
-SELECT file_name, tablespace_name FROM dba_data_files WHERE tablespace_name ='tblspce'; --To check number od datafile associated with tablespace
-DROP TABLESPACE tblspce INCLUDING CONTENTS AND DATAFILES;
-ALTER DATABASE DATAFILE 'C:\oraclexe\app\oracle\oradata\XE\dtlfle1.dbf' OFFLINE DROP;
-ALTER DATABASE DATAFILE 'C:\oraclexe\app\oracle\oradata\XE\dtlfle1.dbf' RESIZE 8M;
-```
-
-```sql
-CREATE SMALLFILE TABLESPACE tblspce --TEMPORARY TABLESPACE for temporary tablespace; UNDO TABLESPACE for undo tablespace
-DATAFILE 'C:\app\oradata\dtlfle1.dbf' --TEMPFILE for temporary tablespace. DATAFILE for permenant tablespace and undo tablespace
-SIZE 100M --M for MB; G for GB; T for TB
-'C:\app\oradata\dtlfle2.dbf' SIZE 100M
-AUTOEXTEND ON NEXT 500M --Extend it by 500 MB after the file gets filled
-MAXSIZE UNLIMITED
-RETENTION NOGUARANTEE --Only for undo tablespace
-LOGGING --LOGGING = Create logs for creation of tables, indexes, inserts etc.. Not available for undo and temporary tablespace
---NO LOGGING = Does not create logs
-EXTENT MANAGEMENT LOCAL UNIFORM SIZE 25M--UNIFORM = Allocate extents in the tablespace with same size. Should be less than datafile size. Default for TEMPORARY tablespace; Not available for undo tablespace.
---AUTOALLOCATE = System will decide the size of extent allocation
-SEGMENT SPACE MANAGEMENT AUTO;--MANUAL/AUTO; Not available for temporary tablespace and undo tablespace
-----
-CREATE SMALLFILE TABLESPACE tblspce
-DATAFILE 'C:\oraclexe\app\oracle\oradata\XE\dtlfle1.dbf'SIZE 100M,
-'C:\oraclexe\app\oracle\oradata\XE\dtlfle2.dbf' SIZE 200M
-AUTOEXTEND ON NEXT 500M
-MAXSIZE UNLIMITED
-LOGGING
-EXTENT MANAGEMENT LOCAL UNIFORM SIZE 25M
-SEGMENT SPACE MANAGEMENT AUTO;
-----
-CREATE SMALLFILE UNDO TABLESPACE tblspce
-DATAFILE 'C:\oraclexe\app\oracle\oradata\XE\dtlfle1.dbf'SIZE 100M,
-'C:\oraclexe\app\oracle\oradata\XE\dtlfle2.dbf' SIZE 100M
-AUTOEXTEND ON NEXT 500M
-MAXSIZE UNLIMITED
-RETENTION GUARANTEE;
-```
 
 ## Physical Storage Structures
 
@@ -279,7 +224,7 @@ The benefits of Real Application Clusters are:
 
 ## Modes of Database Shutdown
 
-**SHUTDOWN IMMEDIATE**: Terminates any executing SQL, uncommitted changes are rolled back and disconnects the users; performs a check point then close the online datafiles
-**SHUTDOWN TRANSACTIONAL**:Prevents users from starting new transactions but wait till all current transactions to complete before shutting down; performs a check point then close the online datafiles
-**SHUTDOWN NORMAL**: Waits for all connected users to disconnect before shutting down; performs a check point then close the online datafiles
-**SHUTDOWN ABORT**: Closes the datafiles without checkpoint, Instance recovery is required in the next startup.
+- **SHUTDOWN IMMEDIATE**: Terminates any executing SQL, uncommitted changes are rolled back and disconnects the users; performs a check point then close the online datafiles
+- **SHUTDOWN TRANSACTIONAL**:Prevents users from starting new transactions but wait till all current transactions to complete before shutting down; performs a check point then close the online datafiles
+- **SHUTDOWN NORMAL**: Waits for all connected users to disconnect before shutting down; performs a check point then close the online datafiles
+- **SHUTDOWN ABORT**: Closes the datafiles without checkpoint, Instance recovery is required in the next startup.
