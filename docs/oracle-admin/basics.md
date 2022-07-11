@@ -56,6 +56,14 @@ TABLESPACE SYSTEM;
 - Contains persistent schema object. Data persist beyond the duration of a session or transaction.
 - Objects in permanent tablespaces are stored in data files.
 
+#### Small-file Tablespace
+
+- Default type of tablespace in Oracle database. Can have multiple data files. Maximum of 1022 data files are allowed.
+
+#### Big-file Tablespace
+
+- Suited for storing large amount of data. Allows maximum 1 data file
+
 ### Temporary Tablespace
 
 - Temporary tablespaces are used for special operations, particularly for sorting data results on disk and for hash joins in SQL.
@@ -70,14 +78,6 @@ Oracle Database keeps records of actions of transactions, before they are commit
 - Committed undo information normally is lost when its undo space is overwritten by a newer transaction.
 - Space occupied by unexpired undo data in undo segments can be consumed if necessary by ongoing transactions. This is the default.
 - You can create more than one undo tablespace but only one of them can be active at any given time.
-
-### Small-file Tablespace
-
-- Default type of tablespace in Oracle database. Can have multiple data files. Maximum of 1022 data filesare allowed.
-
-### Big-file Tablespace
-
-- Suited for storing large amount of data. Allows maximum 1 data file
 
 ## Physical Storage Structures
 
@@ -132,7 +132,7 @@ SQL> CREATE SPFILE FROM MEMORY
 
 - These files are used to configure the different network components of the Oracle database.
 - These include files such as tnsnames.ora and listener.ora.
-- The "listerner.ora" file contains server side network configuration parameters.
+- The "listener.ora" file contains server side network configuration parameters.
 - The "tnsnames.ora" file contains client side network configuration parameters.
 - Location: %ORACLE_HOME%\network\ADMIN
 - IO Error : The Network Adapter could not establish connection
@@ -159,7 +159,7 @@ CMD> lsnrctl start --to start listener
 SQL> SHOW PARAMETER background
 ```
 
-### System Change Number (SCN)
+## System Change Number (SCN)
 
 - SCN (System Change Number) is a primary mechanism to maintain data consistency in Oracle database.
 - Every time a user commits a transaction, Oracle records a new SCN.
@@ -174,11 +174,11 @@ SQL> SELECT ORA_ROWSCN, last_name FROM employees WHERE employee_id = 188;
 
 ## Background Processes
 
-**SMON**: System Monitor recovers after instance failure and monitors temporary segments and extents.
-**PMON**: Process Monitor recovers failed process resources.
-**DBWR**:Database Writer or Dirty Buffer Writer process is responsible for writing dirty buffers from the database buffer cache to the database data files. Generally, DBWR only writes blocks back to the data files on commit, or when the cache is full and space has to be made for more blocks.
-**LGWR**: Log Writer process is responsible for writing the log buffers out to the redo logs.
-**ARCn**: The optional Archive process writes filled redo logs to the archive log location(s).
+- **SMON**: System Monitor recovers after instance failure and monitors temporary segments and extents.
+- **PMON**: Process Monitor recovers failed process resources.
+- **DBWR**:Database Writer or Dirty Buffer Writer process is responsible for writing dirty buffers from the database buffer cache to the database data files. Generally, DBWR only writes blocks back to the data files on commit, or when the cache is full and space has to be made for more blocks.
+- **LGWR**: Log Writer process is responsible for writing the log buffers out to the redo logs.
+- **ARCn**: The optional Archive process writes filled redo logs to the archive log location(s).
 
 ## Oracle Versions Milestones
 

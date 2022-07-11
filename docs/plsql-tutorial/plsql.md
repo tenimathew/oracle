@@ -20,11 +20,11 @@ description: PLSQL
 
 ```sql
 DECLARE
---Declaration statements
+    --Declaration statements
 BEGIN
---Executable statements
+    --Executable statements
 EXCEPTION
---Exception handling statements
+    --Exception handling statements
 END;
 ```
 
@@ -53,7 +53,11 @@ PL/SQL divides the scalar data types into four families:
 - Character
 - Datetime
 
-A scalar data type may have subtypes. A subtype is a data type that is a subset of another data type, which is its base type. A subtype further defines a base type by restricting the value or size of the base data type.
+### Scacalr data type
+
+- A scalar data type may have subtypes.
+- A subtype is a data type that is a subset of another data type, which is its base type.
+- A subtype further defines a base type by restricting the value or size of the base data type.
 
 Note that PL/SQL scalar data types include SQL data types and its own data type such as Boolean.
 
@@ -67,14 +71,15 @@ Note that PL/SQL scalar data types include SQL data types and its own data type 
 - `PLS_INTEGER` and `BINARY_INTEGER` data types are identical.
 
 The `PLS_INTEGER` datatype has the following predefined subtypes:
-| PLS_INTEGER subtypes | Description |
-|----------------------|---------------------------------------------------------------------------------------|
-| NATURAL | Represents nonnegative PLS_INTEGER values |
-| NATURALN | Represents nonnegative PLS_INTEGER values with NOT NULL constraint |
-| POSITIVE | Represents positive PLS_INTEGER values |
-| POSITIVEN | Represents positive PLS_INTEGER value with NOT NULL constraint |
-| SIGNTYPE | Represents three values -1, 0, or 1, which are useful for tri-state logic programming |
-| SIMPLE_INTEGER | Represents PLS_INTEGER values with NOT NULL constraint. |
+
+| PLS_INTEGER subtypes | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| NATURAL              | Represents nonnegative PLS_INTEGER values                                             |
+| NATURALN             | Represents nonnegative PLS_INTEGER values with NOT NULL constraint                    |
+| POSITIVE             | Represents positive PLS_INTEGER values                                                |
+| POSITIVEN            | Represents positive PLS_INTEGER value with NOT NULL constraint                        |
+| SIGNTYPE             | Represents three values -1, 0, or 1, which are useful for tri-state logic programming |
+| SIMPLE_INTEGER       | Represents PLS_INTEGER values with NOT NULL constraint.                               |
 
 ### Boolean data type
 
@@ -102,11 +107,12 @@ The `PLS_INTEGER` datatype has the following predefined subtypes:
 ### Data type synonyms
 
 Data types have synonyms for compartibility with non-Oracle data sources such as IBM Db2, SQL Server. And it is not a good practice to use data type synonym unless you are accessing a non-Oracle Database.
-| Data Type | Synonyms |
-|-----------|------------------------------------------------------------------------------|
-| NUMBER | DEC, DECIMAL, DOUBLE PRECISION, FLOAT, INTEGER, INT, NUMERIC, REAL, SMALLINT |
-| CHAR | CHARACTER, STRING |
-| VARCHAR2 | VARCHAR |
+
+| Data Type | Synonyms                                                                     |
+| --------- | ---------------------------------------------------------------------------- |
+| NUMBER    | DEC, DECIMAL, DOUBLE PRECISION, FLOAT, INTEGER, INT, NUMERIC, REAL, SMALLINT |
+| CHAR      | CHARACTER, STRING                                                            |
+| VARCHAR2  | VARCHAR                                                                      |
 
 ### RAW Datatype
 
@@ -443,55 +449,67 @@ END;
 
 ### DBMS_SQL
 
-The DBMS_SQL package provides an interface to use dynamic SQL to parse any data manipulation language (DML) or data definition language (DDL) statement using PL/SQL. Native Dynamic SQL is an alternative to DBMS_SQL that lets you place dynamic SQL statements directly into PL/SQL blocks. In most situations, Native Dynamic SQL is easier to use and performs better than `DBMS_SQL`. However, Native Dynamic SQL itself has certain limitations
+- The DBMS_SQL package provides an interface to use dynamic SQL to parse any data manipulation language (DML) or data definition language (DDL) statement using PL/SQL.
+- Native Dynamic SQL is an alternative to DBMS_SQL that lets you place dynamic SQL statements directly into PL/SQL blocks.
+- In most situations, Native Dynamic SQL is easier to use and performs better than `DBMS_SQL`.
+- However, Native Dynamic SQL itself has certain limitations
 
-**DBMS_SQL.NATIVE** --Specifies normal behaviour for the database to which the program is connected. Can define behaviour as in Oracle version 6 and 7
-**DBMS_SQL.OPEN_CURSOR**
-**DBMS_SQL.PARSE** --Parsing the statement checks the statement's syntax and associates it with the cursor in your program. You can parse any DML or DDL statement. DDL statements are run on the parse, which performs the implied commit.
-**DBMS_SQL.BIND_VARIABLE**
-**DBMS_SQL.DEFINE_COLUMN** --The columns of the row being selected in a `SELECT` statement are identified by their relative positions as they appear in the select list, from left to right
-**DBMS_SQL.EXECUTE** --Call the EXECUTE function to run your SQL statement.
-**DBMS_SQL.FETCH_ROWS** --The `FETCH_ROWS` function retrieves the rows that satisfy the query.
-**DBMS_SQL.COLUMN_VALUE** --call `COLUMN_VALUE` after fetching rows to actually retrieve the values of the columns in the rows into your program
-**DBMS_SQL.VARIABLE_VALUE** --call `VARIABLE_VALUE` to retrieve the value of an OUT parameter for an anonymous block
-**DBMS_SQL.CLOSE_CURSOR**
+- **DBMS_SQL.NATIVE** --Specifies normal behaviour for the database to which the program is connected. Can define behaviour as in Oracle version 6 and 7
+- **DBMS_SQL.OPEN_CURSOR**
+- **DBMS_SQL.PARSE** --Parsing the statement checks the statement's syntax and associates it with the cursor in your program. You can parse any DML or DDL statement. DDL statements are run on the parse, which performs the implied commit.
+- **DBMS_SQL.BIND_VARIABLE**
+- **DBMS_SQL.DEFINE_COLUMN** --The columns of the row being selected in a `SELECT` statement are identified by their relative positions as they appear in the select list, from left to right
+- **DBMS_SQL.EXECUTE** --Call the EXECUTE function to run your SQL statement.
+- **DBMS_SQL.FETCH_ROWS** --The `FETCH_ROWS` function retrieves the rows that satisfy the query.
+- **DBMS_SQL.COLUMN_VALUE** --call `COLUMN_VALUE` after fetching rows to actually retrieve the values of the columns in the rows into your program
+- **DBMS_SQL.VARIABLE_VALUE** --call `VARIABLE_VALUE` to retrieve the value of an OUT parameter for an anonymous block
+- **DBMS_SQL.CLOSE_CURSOR**
 
 ## DBMS_RANDOM
 
-The `DBMS_RANDOM` package provides a built-in random number generator. DBMS_RANDOM is not intended for cryptography.
-**DBMS_RANDOM.VALUE**(low_value,high_value) --gets a random number with 38 digit decimal
-**DBMS_RANDOM.STRING**(single_character,length) --This function gets a random string.
+- The `DBMS_RANDOM` package provides a built-in random number generator. DBMS_RANDOM is not intended for cryptography.
+- **DBMS_RANDOM.VALUE**(low_value,high_value) --gets a random number with 38 digit decimal
+- **DBMS_RANDOM.STRING**(single_character,length) --This function gets a random string.
 
-**DBMS_LOCK.SLEEP(120)** --This procedure suspends the session for a given period of time (seconds).
+- **DBMS_LOCK.SLEEP(120)** --This procedure suspends the session for a given period of time (seconds).
 
-**DBMS_UTILITY.FORMAT_ERROR_BACKTRACE** --This procedure displays the call stack at the point where an exception was raised
-**DBMS_UTILITY.GET_TIME** --This function determines the current time in 100th's of a second. This subprogram is primarily used for determining elapsed time. The subprogram is called twice –at the beginning and end of some process –and then the first (earlier) number is subtracted from the second (later) number to determine the time elapsed.
-**DBMS_UTILITY.GET_CPU_TIME** --CPU time
+- **DBMS_UTILITY.FORMAT_ERROR_BACKTRACE** --This procedure displays the call stack at the point where an exception was raised
+- **DBMS_UTILITY.GET_TIME**
+  -This function determines the current time in 100th's of a second.
+  - This subprogram is primarily used for determining elapsed time.
+  - The subprogram is called twice –at the beginning and end of some process –and then the first (earlier) number is subtracted from the second (later) number to determine the time elapsed.
+- **DBMS_UTILITY.GET_CPU_TIME** --CPU time
 
-**DBMS_OUTPUT.PUT_LINE**
-**DBMS_OUTPUT.PUT_LINE($$PLSQL_LINE);** --Displays line number
-**DBMS_OUTPUT.DISABLE**
+- **DBMS_OUTPUT.PUT_LINE**
+- **DBMS_OUTPUT.PUT_LINE($$PLSQL_LINE);** --Displays line number
+- **DBMS_OUTPUT.DISABLE**
 
-**DBMS_STATS.GATHER_TABLE_STATS** --This procedure gathers table and column (and index) statistics.
+- **DBMS_STATS.GATHER_TABLE_STATS** --This procedure gathers table and column (and index) statistics.
+
+```sql
 EXEC DBMS_STATS.GATHER_SCHEMA_STATS(USER, CASCADE => TRUE);
+```
 
-**DBMS_XPLAN.DISPLAY** --to format and display the contents of a plan table.
-**DBMS_XPLAN.DISPLAY_AWR** --to format and display the contents of the execution plan of a stored SQL statement in the AWR.
-**DBMS_XPLAN.DISPLAY_CURSOR** --to format and display the contents of the execution plan of any loaded cursor.
+- **DBMS_XPLAN.DISPLAY** --to format and display the contents of a plan table.
+- **DBMS_XPLAN.DISPLAY_AWR** --to format and display the contents of the execution plan of a stored SQL statement in the AWR.
+- **DBMS_XPLAN.DISPLAY_CURSOR** --to format and display the contents of the execution plan of any loaded cursor.
 
-**DBMS_METADATA.GET_DDL**
+- **DBMS_METADATA.GET_DDL**
+
+```sql
 SELECT DBMS_METADATA.GET_DDL ('TABLE', 'EMPLOYEES', 'HR') FROM DUAL;
 --to get DDL for a view just replace first argument with ‘VIEW’ and second with your view name and so.
+```
 
-**DBMS_REFRESH.ADD** --Adds materialized views to a refresh group.
-**DBMS_REFRESH.MAKE** --To make materialized view refresh group
-**DBMS_REFRESH.CHANGE** --Changes the refresh interval for a refresh group.
-**DBMS_REFRESH.DESTROY** --Removes all of the materialized views from a refresh group and deletes the refresh group.
-**DBMS_REFRESH.REFRESH** --Manually refreshes a refresh group.
-**DBMS_REFRESH.SUBTRACT** --Removes materialized views from a refresh group.
+- **DBMS_REFRESH.ADD** --Adds materialized views to a refresh group.
+- **DBMS_REFRESH.MAKE** --To make materialized view refresh group
+- **DBMS_REFRESH.CHANGE** --Changes the refresh interval for a refresh group.
+- **DBMS_REFRESH.DESTROY** --Removes all of the materialized views from a refresh group and deletes the refresh group.
+- **DBMS_REFRESH.REFRESH** --Manually refreshes a refresh group.
+- **DBMS_REFRESH.SUBTRACT** --Removes materialized views from a refresh group.
 
-**DBMS_MVIEW.REFRESH** --Refreshes one or more materialized views that are not members of the same refresh group
-**DBMS_MVIEW.REFRESH_ALL_MVIEWS** --Refreshes all materialized views
+- **DBMS_MVIEW.REFRESH** --Refreshes one or more materialized views that are not members of the same refresh group
+- **DBMS_MVIEW.REFRESH_ALL_MVIEWS** --Refreshes all materialized views
 
 ## Table Clusters
 
