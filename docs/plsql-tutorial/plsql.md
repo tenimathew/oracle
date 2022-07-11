@@ -53,7 +53,7 @@ PL/SQL divides the scalar data types into four families:
 - Character
 - Datetime
 
-### Scacalr data type
+### Scalar data type
 
 - A scalar data type may have subtypes.
 - A subtype is a data type that is a subset of another data type, which is its base type.
@@ -63,7 +63,7 @@ Note that PL/SQL scalar data types include SQL data types and its own data type 
 
 ### Numeric data types
 
-- The numeric data types represent real numbers, integers, and floating-point numbers. They are stored as `NUMBER`, IEEE floating-point storage types (`BINARY_FLOAT` and `BINARY_DOUBLE`), and PLS_INTEGER.
+- The numeric data types represent real numbers, integers, and floating-point numbers. They are stored as `NUMBER`, IEEE floating-point storage types (`BINARY_FLOAT` and `BINARY_DOUBLE`), and `PLS_INTEGER`.
 - The data types `NUMBER`, `BINARY_FLOAT`, and `BINARY_DOUBLE` are SQL data types.
 - The `PLS_INTEGER` datatype is specific to PL/SQL. It represents signed 32 bits integers that range from -2,147,483,648 to 2,147,483,647.
 - Because `PLS_INTEGER` datatype uses hardware arithmetic, they are faster than `NUMBER` operations, which uses software arithmetic.
@@ -85,19 +85,22 @@ The `PLS_INTEGER` datatype has the following predefined subtypes:
 
 - The `BOOLEAN` datatype has three data values: `TRUE`, `FALSE`, and `NULL`.
 - Boolean values are typically used in control flow structure such as `IF-THEN`, `CASE`, and loop statements like `LOOP`, `FOR LOOP`, and `WHILE LOOP`.
-
 - SQL does not have the `BOOLEAN` data type, therefore, you cannot:
   - Assign a `BOOLEAN` value to a table column.
   - Select the value from a table column into a `BOOLEAN` variable.
   - Use a `BOOLEAN` value in a SQL function.
   - Use a `BOOLEAN` expression in a SQL statement.
-  - Use a `BOOLEAN` value in the `DBMS_OUTPUT.PUTLINE` and `DBMS_OUTPUT.PUT` subprograms.
+  - Use a `BOOLEAN` value in the `DBMS_OUTPUT.PUT_LINE` and `DBMS_OUTPUT.PUT` subprograms.
 
 ### Character data types
 
 - The character data types represent alphanumeric text. PL/SQL uses the SQL character data types such as `CHAR`, `VARCHAR2`, `LONG`, `RAW`, `LONG RAW`, `ROWID`, and `UROWID`.
 - `CHAR(n)` is a fixed-length character type whose length is from 1 to 32,767 bytes.
 - `VARCHAR2(n)` is varying length character data from 1 to 32,767 bytes.
+
+#### RAW Datatype
+
+- In Oracle PL/SQL, RAW is a data type used to store binary data, or data which is byte oriented (for example, graphics or audio files). One of the most important things to note about RAW data is that it can only be queried or inserted; RAW data cannot be manipulated. RAW data is always returned as a hexadecimal character value
 
 ### Datetime data types
 
@@ -113,10 +116,6 @@ Data types have synonyms for compartibility with non-Oracle data sources such as
 | NUMBER    | DEC, DECIMAL, DOUBLE PRECISION, FLOAT, INTEGER, INT, NUMERIC, REAL, SMALLINT |
 | CHAR      | CHARACTER, STRING                                                            |
 | VARCHAR2  | VARCHAR                                                                      |
-
-### RAW Datatype
-
-- In Oracle PL/SQL, RAW is a data type used to store binary data, or data which is byte oriented (for example, graphics or audio files). One of the most important things to note about RAW data is that it can only be queried or inserted; RAW data cannot be manipulated. RAW data is always returned as a hexadecimal character value
 
 ### CONSTANT, DEFAULT, NOT NULL
 
@@ -437,13 +436,6 @@ BEGIN
     DBMS_DDL.CREATE_WRAPPED(PACKAGE_TEXT);
 END;
 ```
-
-## High Water Mark
-
-- This is a term used with table segments stored in the database.
-- If you envision a table, for example, as a 'flat' structure or as a series of blocks laid one after the other in a line from left to right, the high-water mark (HWM) would be the rightmost block that ever contained data.
-- HWM starts at the first block of a newly created table. As data is placed into the table over time and more blocks get used, the HWM rises.
-- If we delete some (or even all) of the rows in the table, we might have many blocks that no longer contain data, but they are still under the HWM, and they will remain under the HWM until the object is rebuilt, truncated, or shrunk.
 
 ## DBMS Packages
 

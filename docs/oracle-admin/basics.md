@@ -79,6 +79,15 @@ Oracle Database keeps records of actions of transactions, before they are commit
 - Space occupied by unexpired undo data in undo segments can be consumed if necessary by ongoing transactions. This is the default.
 - You can create more than one undo tablespace but only one of them can be active at any given time.
 
+## High Water Mark
+
+- This is a term used with table segments stored in the database.
+- If you envision a table, for example, as a 'flat' structure or as a series of blocks laid one after the other in a line from left to right, the high-water mark (HWM) would be the rightmost block that ever contained data.
+- HWM starts at the first block of a newly created table. As data is placed into the table over time and more blocks get used, the HWM rises.
+- If we delete some (or even all) of the rows in the table, we might have many blocks that no longer contain data, but they are still under the HWM, and they will remain under the HWM until the object is rebuilt, truncated, or shrunk.
+
+![](img/2022-07-11-14-31-40.png)
+
 ## Physical Storage Structures
 
 ### Data files
