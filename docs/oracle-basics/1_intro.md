@@ -273,31 +273,44 @@ CREATE TABLE inventories
 ## SDLC
 
 - Software development life cycle (SDLC) is a series of phases that provide a common understanding of the software building process.
+- The Software Development Life Cycle (SDLC) is a structured process that enables the production of high-quality, low-cost software, in the shortest possible production time.
+- The goal of the SDLC is to produce superior software that meets and exceeds all customer expectations and demands.
+- The SDLC defines and outlines a detailed plan with stages, or phases, that each encompass their own process and deliverables.
+- Adherence to the SDLC enhances development speed and minimizes project risks and costs associated with alternative methods of production.
 
-### Waterfall Model
+### Waterfall Model - 1970s to 90s
 
 - The Waterfall Model is a linear sequential flow. In which progress is seen as flowing steadily downwards (like a waterfall) through the phases of software implementation.
 - This means that any phase in the development process begins only if the previous phase is complete. The waterfall approach does not define the process to go back to the previous phase to handle changes in requirement.
 - The waterfall approach is the earliest approach and most widely known that was used for software development.
-- The usage
-  - Projects which not focus on changing the requirements
+- Phases
+  - Requirement Analysis
+  - Planning
+  - Designing
+  - Coding
+  - Testing
+  - Deployment
+  - Maintenance
 
-### V-Shaped Model
-
-- It is an extension of the waterfall model, Instead of moving down in a linear way, the process steps are bent upwards after the implementation and coding phase, to form the typical V shape. The major difference between the V-shaped model and waterfall model is the early test planning in the V-shaped model.
-- The usage
-
-  - Software requirements clearly defined and known
-  - Software development technologies and tools are well-known
+![](img/2022-07-19-12-35-46.png)
 
 ### Prototyping Model
 
+- An outdated methodology that is no longer in active use, it served its purpose as one of the earliest alternatives to Waterfall, dating back to the mid 1970s.
 - It refers to the activity of creating prototypes of software applications, for example, incomplete versions of the software program being developed.
-- It is an activity that can occur in software development and It used to visualize some component of the software to limit the gap of misunderstanding the customer requirements by the development team.
-- This also will reduce the iterations may occur in the waterfall approach and hard to be implemented due to the inflexibility of the waterfall approach. So, when the final prototype is developed, the requirement is considered to be frozen.
-- The usage
-  - This process can be used with any software developing life cycle model. While this shall be chosen when you are developing a system has user interactions.
-  - So, if the system does not have user interactions, such as a system does some calculations shall not have prototypes.
+- From there, prototypes are evolved into final software requirements
+
+![](img/2022-07-19-12-36-04.png)
+
+### Iterative Model
+
+- With the Iterative Model, only the major requirements are known from the beginning.
+- Based on these, the development team creates a quick and cheap first version of the software.
+- Then, as additional requirements are identified, additional iterations of the software are designed and built.
+- Each iteration goes through all the phases of the SDLC and these cycles are repeated until completion.
+- It was common for the team to work on several SDLC phases at the same time.
+
+![](img/2022-07-19-12-40-16.png)
 
 ### Spiral Model (SDM)
 
@@ -308,22 +321,121 @@ CREATE TABLE inventories
 - The usage
   - It is used in the large applications and systems which built-in small phases or segments.
 
-### Iterative and Incremental Model
+![](img/2022-07-19-12-44-52.png)
 
-- It is developed to overcome the weaknesses of the waterfall model.
-- It starts with an initial planning and ends with deployment with the cyclic interactions in between.
-- The basic idea behind this method is to develop a system through repeated cycles (iterative) and in smaller portions at a time (incremental), allowing software developers to take advantage of what was learned during the development of earlier parts or versions of the system.
-- It can consist of mini waterfalls or mini V-Shaped model
+### V-Shaped Model
+
+- It is an extension of the waterfall model, Instead of moving down in a linear way, the process steps are bent upwards after the implementation and coding phase, to form the typical V shape. The major difference between the V-shaped model and waterfall model is the early test planning in the V-shaped model.
 - The usage
-  - It is used in shrink-wrap application and large system which built-in small phases or segments.
-  - Also, can be used in a system has separated components, for example, ERP system.
-  - Which we can start with the budget module as a first iteration and then we can start with the inventory module and so forth.
+  - Software requirements clearly defined and known
+  - Software development technologies and tools are well-known
+
+![](img/2022-07-19-12-45-44.png)
 
 ### Agile Model
+
+![](img/2022-07-19-12-46-19.png)
 
 - It is based on iterative and incremental development, where requirements and solutions evolve through collaboration between cross-functional teams.
 - The usage
   - It can be used with any type of the project, but it needs more engagement from the customer and to be interactive. Also, we can use it when the customer needs to have some functional requirement ready in less than three weeks and the requirements are not clear enough. This will enable more valuable and workable piece for software early which also increase the customer satisfaction.
+- The Agile Manifesto’s 4 Core Values
+  - Individuals and interactions over processes and tools
+  - Working software over comprehensive documentation
+  - Customer collaboration over contract negotiation
+  - Responding to change over following a plan
+
+#### Agile Roles
+
+- **Product Owner** - The Product Owner, also known as the “voice of the customer”, defines the product vision based on all insights, feedback, and ideas gathered. He or she is the owner of the product requirements and works closely with the development team to communicate the vision by documenting it in short narratives called User Stories. User Stories typically include a name, description, reference to any external documents, and an explanation of how to test the implementation. Product Owners often maintain a backlog of User Stories if there are too many to be executed concurrently.
+- **Scrum Master** - Similar to a project manager, this role is all about making sure the team is following Agile principles, values, and processes.
+- **Team Member** - All members of the development team have different skills and collaborate together to build functional software. Teams can include QA engineers, business analysts, designers, database engineers, and more depending on the project scope.
+
+#### Agile Frameworks
+
+##### Scrum
+
+![](img/2022-07-19-13-08-37.png)
+
+- Scrum is a very popular Agile framework characterized by continuous collaboration, frequent deliveries, and special development cycles called ‘Sprints’. Scrum revolves around the following checkpoints:
+  - **Planning meetings**, in which the team identifies and discusses the Sprint priorities.
+  - **Commitment meetings**, in which the team reviews the backlog of user stories to determine how much effort it involves and how much work can be done during the upcoming Sprint.
+  - **Daily standup meetings**, which are notably short meetings that ensure everyone is aligned. In this regard, each team member communicates updates on story status, blockers, or concerns.
+  - **Demo meetings**, which the team attends at the end of each Sprint to show the functionalities implemented during the current sprint to the Product Owner.
+  - **Retrospective meetings**, which are also hosted at the end of each Sprint to discuss lessons learned, what went well, and what needs improvement.
+- Scrum introduces the Scrum Master role to the Agile method. The Scrum Master’s job is to manage and improve processes, help the team stay authentic to Agile values, and focus on maximizing productivity. A good Scrum Master ensures that the process and progress are transparent to all stakeholders.
+
+##### Kanban
+
+![](img/2022-07-19-13-10-11.png)
+
+- Kanban is a scheduling system framework for the Agile-eque Lean methodology. It doesn’t have its roots in software development, but synergizes very well with Agile and has become a staple of Agile teams.
+- Kanban got its start in lean manufacturing, where Toyota applied the same “just in time” principles that supermarkets use to manage inventory stock levels based on customer demand. Kanban, meaning signboard in Japanese, uses cards to track and support the production system by visually showing the steps within the process and how long each step is taking using cards.
+- Kanban has a host of benefits when applied to Agile. You can limit WIP, focus on cycle time, and utilize just-in-time practices.
+- Kanban is sometimes compared to Scrum, which are similar in some ways, but are distinct frameworks:
+  - Scrum utilizes fixed length Sprints cycles while Kanban is about continuous flow
+  - Scrum is role focused, while Kanban doesn’t utilize roles
+  - Scrum measures velocity, while Kanban focuses on cycle time
+  - In the Kanban framework, the team creates a visual representation of their tasks and statuses by using sticky notes on a physical whiteboard or by using a dedicated software application. Tasks are moved through predefined stages such as To-Do, In Progress, In Review, or Complete.
+- A few examples of popular Kanban productivity apps:
+  - Trello
+  - Jira
+  - Proofhub
+  - Zoho Projects
+  - ZenHubs
+
+##### Extreme Programming
+
+![](img/2022-07-19-13-12-31.png)
+
+- Extreme Programming (XP) is an Agile framework focused on project flexibility and writing high quality, well-tested code. The official Extreme Programming website states that XP improves a software project in 5 key ways:
+
+  - Communication
+  - Simplicity
+  - Feedback
+  - Respect
+  - Courage
+
+- Extreme Programming is best known for the following:
+  - **Pair programming** is a technique where two programmers share the same workstation and create software together. One acts as the driver and the other one as the navigator, then they switch roles. When paired, code review can take place instantly, and defects are more likely to be identified and corrected immediately. Pair programming encourages mentorship, knowledge sharing, and learning. And while it may take more time to produce new code when two developers work on the same task, the resulting code is higher quality with less defects.
+  - **Unit and functional testing** are emphasized in XP. Tests are to be comprehensive and automated, reducing technical debt and ensuring code can confidently be validated and re-used.
+  - **Continuous communication** between programmers and stakeholders to gather and act upon their input, feedback, and change requests. XP requires an “extended development team” that may include business managers, customers, and other key stakeholders.
+
+##### Lean
+
+![](img/2022-07-19-13-17-13.png)
+
+- Lean isn’t a software development methodology. Lean’s origins go back to a manufacturing production method invented in the 1930s, officially given a name in the 80s, and more-formally defined in the 90s. Lean is a system that focuses on making more with less. Many have more-recently discovered that Lean works extremely well with software development, especially Agile.
+- While Agile focuses on delivering continuous value, the goal of Lean is to increase the speed and decrease the cost of product development. With Lean, the highest risks are wasted time and effort. Lean discourages multitasking and encourages team members to focus on what’s important in the present moment. By doing this, the waste associated with unnecessary documentation, meetings, or planning are eliminated.
+- Lean focuses on the following “just in time” principles:
+  - Eliminating waste in cost, scope, and scheduling
+  - Amplifying learning
+  - Taking decisions as late as possible
+  - Fast delivery
+  - Empowering the team
+  - Building integrity
+  - Optimizing the entire project
+
+##### DevOps
+
+![](img/2022-07-19-13-18-03.png)
+
+- DevOps is not technically an SDLC methodology but it does share the goal of maximizing software project success and includes Agile-inspired concepts.
+- On Wikipedia, DevOps is defined as “a set of practices that combines software development and IT operations. It aims to shorten the systems development life cycle and provide continuous delivery with high software quality. DevOps is complementary with Agile software development; several DevOps aspects came from Agile methodology.”
+- DevOps, just like Lean, can work alongside Agile to create an infrastructure that eliminates the barriers slowing development and delivery of the final software product. DevOps brings deployment and operation of the software fully into the Agile development process in the same way Agile brought testing and business analysis into software development. Ultimately, the team is empowered to be self-sufficient and take ownership of software development, shipping, and support. They use Continuous Delivery (CD) for frequent releases and to maintain a well-tested and high-quality codebase.
+
+**History of DevOps**
+
+- The DevOps movement started around 2008. The constant pressure to make rapid changes plus the emergence of a new wave of infrastructure automation allowed non-specialists to enter the space and highlighted the need for cross-functional collaboration.
+- New expectations around delivering more-regular software changes were a big motivation for creating DevOps. Desktop applications were being replaced by web and mobile applications, and instead of delivering physical media (CDs or DVDs), companies began providing Software as a Service (SaaS) over the web. As the industry’s challenges evolved, DevOps offered a solution.
+
+**Advantages of DevOps**
+
+- Software development teams are self-sufficient; shipping and maintaining software without depending on the IT or technical operations teams.
+- The deployment process is automated and optimized. A junior developer can learn to safely deploy, with less effort.
+- Teams implement Continuous Integration / Continuous Delivery (CI/CD).
+- Using the right tools, engineers save time on deployment so they can focus on coding.
+- Feedback loops integrated throughout the entire process.
 
 ## Testing
 

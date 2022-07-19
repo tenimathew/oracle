@@ -110,6 +110,8 @@ WHERE b.id IS NULL;
 
 ![](img/2022-05-30-21-14-22.png)
 
+![](img/2022-05-30-21-29-42.png)
+
 ### Joining multiple tables
 
 ```sql
@@ -134,6 +136,8 @@ FROM orders
 WHERE order_id = 58;
 ```
 
+![](img/2022-07-19-12-30-59.png)
+
 Now if you move the condition from the WHERE clause to the `ON` clause of the `LEFT JOIN`:
 
 ```sql
@@ -143,6 +147,7 @@ FROM orders
     ON employee_id = salesman_id
     AND order_id = 58;
 ```
+![](img/2022-07-19-12-31-17.png)
 
 In this case, the query returns all orders but only the order 58 had the salesman data associated with it.
 

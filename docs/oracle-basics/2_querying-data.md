@@ -21,7 +21,7 @@ SELECT * FROM table_name;
 
 When you embed the query in applications, it is a good practice to explicitly specify the columns from which you want to query data even when you want to retrieve data from all columns of a table.
 
-You should the asterisk (\*) shorthand for ad-hoc queries only.
+You should use the asterisk (\*) shorthand for ad-hoc queries only.
 
 This is because a table may have more or fewer columns in the future due to the business changes.
 
