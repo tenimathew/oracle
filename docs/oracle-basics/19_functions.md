@@ -1270,6 +1270,22 @@ FROM dual;
 
 ### DECODE
 
+```sql
+DECODE (search_value, search_value1, if search_value & search_value1 is same show this,
+                      search_value2, if search_value & search_value2 is same show this,
+                      search_value3, if search_value & search_value3 is same show this,
+                      default)
+
+SELECT product_id,
+       DECODE (warehouse_id, 1, 'Southlake',
+                             2, 'San Francisco',
+                             3, 'New Jersey',
+                             4, 'Seattle',
+                                'Non domestic')
+       "Location of inventory" FROM inventories
+       WHERE product_id < 1775;
+```
+
 ### NVL
 
 - The `NVL()` function accepts two arguments. If e1 evaluates to null, then `NVL()` function returns e2. If e1 evaluates to non-null, the `NVL()` function returns e1.

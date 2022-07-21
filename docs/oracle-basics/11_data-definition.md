@@ -124,18 +124,6 @@ ALTER TABLE accounts
 ADD status NUMBER( 1, 0 ) DEFAULT 1 NOT NULL ;
 ```
 
-### ALTER TABLE DROP COLUMN example
-
-```sql
-ALTER TABLE persons
-DROP COLUMN birthdate;
-```
-
-```sql
-ALTER TABLE persons
-DROP ( email, phone );
-```
-
 ### ALTER TABLE RENAME column example
 
 ```sql
@@ -167,7 +155,7 @@ RENAME TABLE table_name_1 TO new_table_name_1,
 
 ### Drop Column using SET UNUSED COLUMN clause
 
-The process of dropping a column from a big table can be time and resource consuming. Therefore, we typically drop the column logically by using the A`LTER TABLE SET UNUSED COLUMN` statement as follows:
+The process of dropping a column from a big table can be time and resource consuming. Therefore, we typically drop the column logically by using the `ALTER TABLE SET UNUSED COLUMN` statement as follows:
 
 ```sql
 ALTER TABLE table_name
@@ -215,6 +203,16 @@ DROP (
     column_name_1,
     column_name_2
 );
+```
+
+```sql
+ALTER TABLE persons
+DROP COLUMN birthdate;
+```
+
+```sql
+ALTER TABLE persons
+DROP ( email, phone );
 ```
 
 ### DROP TABLE statement
@@ -456,13 +454,10 @@ These are limitations of virtual columns:
 - Virtual columns are only supported in relational heap tables, but not in index-organized, external, object, cluster, or temporary tables.
 - The virtual column cannot be an Oracle-supplied datatype, a user-defined type, or `LOB` or `LONG RAW`.
 - The expression in the virtual column has the following restrictions:
-
-The expression in the virtual column has the following restrictions:
-
-- It cannot refer to other virtual columns.
-- It cannot refer to normal columns of other tables.
-- It must return a scalar value.
-- It may refer to a deterministic user-defined function, however, if it does, the virtual column cannot be used as a partitioning key column.
+  - It cannot refer to other virtual columns.
+  - It cannot refer to normal columns of other tables.
+  - It must return a scalar value.
+  - It may refer to a deterministic user-defined function, however, if it does, the virtual column cannot be used as a partitioning key column.
 
 ### Show virtual columns of a table
 
@@ -522,7 +517,6 @@ COMMENT ON COLUMN employees.job_id IS ' ';
 
 ```sql
 CREATE [PUBLIC] DATABASE LINK link_name
-
 CONNECT TO remote_username IDENTIFIED BY remote_password
 USING 'hostname:port_number/SID' or 'TNS_Name'
 

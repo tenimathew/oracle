@@ -112,6 +112,8 @@ WHERE b.id IS NULL;
 
 ![](img/2022-05-30-21-29-42.png)
 
+![](img/2022-07-19-13-47-44.png)
+
 ### Joining multiple tables
 
 ```sql
@@ -147,6 +149,7 @@ FROM orders
     ON employee_id = salesman_id
     AND order_id = 58;
 ```
+
 ![](img/2022-07-19-12-31-17.png)
 
 In this case, the query returns all orders but only the order 58 had the salesman data associated with it.
@@ -340,20 +343,21 @@ ORDER BY
 
 ## Hierarchical Queries
 
-**START WITH** -> Define the root node(s) of the hierarchy
-**CONNECT BY** -> Defines how the current row (child) relates to a prior row(parent)
-**PRIOR** -> Previous(parent) level
-**LEVEL** -> The position (indentation) in the hierarchy of the current row in relation to the root node
-**ORDER SIBLINGS BY** -> Order of the rows which all shares the same parent row
-**CONNECT_BY_ROOT**-> To get the root node associated with the current row SYS_CONNECT_BY_PATH(column_name,'delimiter') -> Delimited break from the root node to the current row
-**CONNECT_BY_ISLEAF** -> 1 for leaf nodes and 0 for non-leaf nodes
-**CONNECT BY NOCYCLE** -> No to raise errors if loop exist. (Ex: KING is manager of BLAKE, BLAKE is manager of KING)
+- **START WITH** -> Define the root node(s) of the hierarchy
+- **CONNECT BY** -> Defines how the current row (child) relates to a prior row(parent)
+- **PRIOR** -> Previous(parent) level
+- **LEVEL** -> The position (indentation) in the hierarchy of the current row in relation to the root node
+- **ORDER SIBLINGS BY** -> Order of the rows which all shares the same parent row
+- **CONNECT_BY_ROOT**-> To get the root node associated with the current row
+- SYS_CONNECT_BY_PATH(column_name,'delimiter') -> Delimited break from the root node to the current row
+- **CONNECT_BY_ISLEAF** -> 1 for leaf nodes and 0 for non-leaf nodes
+- **CONNECT BY NOCYCLE** -> NOCYCLE to raise errors if loop exist. (Ex: KING is manager of BLAKE, BLAKE is manager of KING)
 
 ```sql
-SELECTempno, ename, job, PRIORename --PRIOR ename = mgr name from previous level
+SELECT empno, ename, job, PRIOR ename --PRIOR ename = mgr name from previous level
 FROM emp
 START WITH mgr IS NULL
-CONNECT BYmgr = PRIOR empno;
+CONNECT BY mgr = PRIOR empno;
 ```
 
 ```sql
@@ -364,12 +368,12 @@ CONNECT BY mgr = PRIOR empno;
 ```
 
 ```sql
-SELECT LPAD('', LEVEL*2, '') ||family_member ASwho,
+SELECT LPAD('', LEVEL*2, '') || family_member AS who,
 mother,
 father
-FROMyour_family
-START WITHfamily_member in ('Aliyamma','Thomas') --level 1 of hierarchy
-CONNECT BY NOCYCLE PRIORfamily_member IN (mother,father) --PRIOR gives access to level above
+FROM your_family
+START WITH family_member in ('Aliyamma','Thomas') --level 1 of hierarchy
+CONNECT BY NOCYCLE PRIOR family_member IN (mother,father) --PRIOR gives access to level above
 ```
 
 ## CASE vs. DECODE
@@ -398,6 +402,7 @@ Ex3:
 l_query := 'SELECT claim_id, claim_amount FROM claims WHERE ssn =' || l_ssn;
 The user passes the following for the value l_ssn
 '123456789' UNION ALL SELECT claim_id, claim_amount FROM claims
+
 The value of the l_query variable is transformed to:
 SQL Statement: SELECT claim_id, claim_amount FROM claims WHERE ssn = '123456789' UNION ALL SELECT claim_id, claim_amount FROM claims
 ```

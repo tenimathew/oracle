@@ -150,6 +150,17 @@ AS
 SELECT * FROM emp@db1.world;
 ```
 
+- **IMMEDIATE** : The materialized view is populated immediately.
+- **DEFERRED** : The materialized view is populated on the first requested refresh.
+- **FAST** : A fast refresh is attempted. If materialized view logs are not present against the source tables in advance, the creation fails. -- Have to create MVIEW LOG before creating MVIEW
+- **COMPLETE** : The table segment supporting the materialized view is truncated and repopulated completely using the associated query.
+- **FORCE** : A fast refresh is attempted. If one is not possible a complete refresh is performed.
+- **ON COMMIT** : The refresh is triggered by a committed data change in one of the dependent tables.
+- **ON DEMAND** : The refresh is initiated by a manual request or a scheduled task.
+- **QUERY REWRITE**: tells the optimizer if the materialized view should be consider for query rewrite operations.
+- **ON PREBUILT TABLE**: tells the database to use an existing table segment, which must have the same name as the materialized view and support the same column structure as the query.
+  - Remember to gather stats after building the materialized view.
+
 ```sql
 -- Pre-Built
 CREATE MATERIALIZED VIEW view-name
@@ -174,16 +185,6 @@ AS
 SELECT * FROM emp@db1.world;
 ```
 
-- **IMMEDIATE** : The materialized view is populated immediately.
-- **DEFERRED** : The materialized view is populated on the first requested refresh.
-- **FAST** : A fast refresh is attempted. If materialized view logs are not present against the source tables in advance, the creation fails. -- Have to create MVIEW LOG before creating MVIEW
-- **COMPLETE** : The table segment supporting the materialized view is truncated and repopulated completely using the associated query.
-- **FORCE** : A fast refresh is attempted. If one is not possible a complete refresh is performed.
-- **ON COMMIT** : The refresh is triggered by a committed data change in one of the dependent tables. ON DEMAND : The refresh is initiated by a manual request or a scheduled task.
-- **QUERY REWRITE**: tells the optimizer if the materialized view should be consider for query rewrite operations.
-- **ON PREBUILT TABLE**: tells the database to use an existing table segment, which must have the same name as the materialized view and support the same column structure as the query.
-- Remember to gather stats after building the materialized view.
-
 ```sql
   BEGIN
     DBMS_STATS.GATHER_TABLE_STATS(
@@ -204,21 +205,18 @@ GRANT CREATE DATABASE LINK TO scott;
 
 - Since a complete refresh involves truncating the materialized view segment and re-populating it using the related query, it can be quite time consuming and involve a considerable amount of network traffic when performed against a remote table. To reduce the replication costs, materialized view logs can be created to capture all changes to the base table since the last refresh. This information allows a fast refresh, which only needs to apply the changes rather than a complete refresh of the materialized view.
 - To take advantage of the fast refresh, connect to the master instance and create the materialized view log.
-
-```sql
-CREATE MATERIALIZED VIEW LOG ON scott.emp WITH [ROWID | ,PRIMARY KEY | ,SEQUENCE] [[INCLUDING | EXCLUDING] NEW VALUES];
-```
-
-- The **NEW VALUES** clause lets you determine whether Oracle Database saves both old and new values for update DML operations in the materialized view log.
-
-- **`INCLUDING`**
-
+- `PRIMARY KEY`
+  - Specify `PRIMARY KEY` to indicate that the primary key of all rows changed should be recorded in the materialized view log.
+- `ROWID`
+  - Specify `ROWID` to indicate that the rowid of all rows changed should be recorded in the materialized view log.
+- `SEQUENCE`
+  - Specify `SEQUENCE` to indicate that a sequence value providing additional ordering information should be recorded in the materialized view log. Sequence numbers are necessary to support fast refresh after some update scenarios.
+- The `NEW VALUES` clause lets you determine whether Oracle Database saves both old and new values for update DML operations in the materialized view log.
+- `INCLUDING`
   - Specify `INCLUDING` to save both new and old values in the log. If this log is for a table on which you have a single-table materialized aggregate view, and if you want the materialized view to be eligible for fast refresh, then you must specify `INCLUDING`.
-
-- **`EXCLUDING`**
-
+- `EXCLUDING`
   - Specify `EXCLUDING` to disable the recording of new values in the log. This is the default. You can use this clause to avoid the overhead of recording new values. Do not use this clause if you have a fast- refreshable single-table materialized aggregate view defined on the master table.
-  - When MVIEW LOG is created, MLOG$ table is automatically created. Also, if you add a Primary Key into the MVIEW, additional table RUPD$ (Global Temporary Table) is created.
+- When MVIEW LOG is created, MLOG$ table is automatically created. Also, if you add a Primary Key into the MVIEW, additional table RUPD$ (Global Temporary Table) is created.
 
 | MLOG$           |             |
 | --------------- | ----------- |
@@ -240,6 +238,70 @@ CREATE MATERIALIZED VIEW LOG ON scott.emp WITH [ROWID | ,PRIMARY KEY | ,SEQUENCE
 | ----------- | ---------- | --------- | --------- | --------------- | ---------------- |
 | Primary Key | SNAPTIME$$ | DMLTYPE$$ | OLD_NEW$$ | CHANGE_VECTOR$$ | XID$$            |
 | 280         | 01-01-2020 | I         | N         | FE              | 1688935759611360 |
+
+```sql
+CREATE MATERIALIZED VIEW LOG ON schema.table_name WITH [ROWID | ,PRIMARY KEY | ,SEQUENCE] [[INCLUDING | EXCLUDING] NEW VALUES];
+```
+
+- Below materialized view log supports fast refresh for primary key materialized views only.
+
+```sql
+CREATE MATERIALIZED VIEW LOG ON customers
+```
+
+- Below materialized view log makes fast refresh possible for rowid materialized views and for materialized join views.
+
+```sql
+CREATE MATERIALIZED VIEW LOG ON customers WITH PRIMARY KEY, ROWID;
+```
+
+#### Specifying Filter Columns for Materialized View Logs & Creating Materialized Aggregate Views
+
+- To provide for fast refresh of materialized aggregate views, you must also specify the `SEQUENCE` and `INCLUDING NEW VALUES` clauses
+
+```sql
+CREATE MATERIALIZED VIEW LOG ON sales
+   WITH ROWID, SEQUENCE(amount_sold, time_id, prod_id)
+   INCLUDNG NEW VALUES;
+
+
+CREATE MATERIALIZED VIEW LOG ON times
+   WITH ROWID, SEQUENCE (time_id, calendar_year)
+   INCLUDING NEW VALUES;
+
+CREATE MATERIALIZED VIEW LOG ON products
+   WITH ROWID, SEQUENCE (prod_id)
+   INCLUDING NEW VALUES;
+
+CREATE MATERIALIZED VIEW sales_mv
+   BUILD IMMEDIATE
+   REFRESH FAST ON COMMIT
+   AS SELECT t.calendar_year, p.prod_id,
+      SUM(s.amount_sold) AS sum_sales
+      FROM times t, products p, sales s
+      WHERE t.time_id = s.time_id AND p.prod_id = s.prod_id
+      GROUP BY t.calendar_year, p.prod_id;
+```
+
+#### Specifying Join Columns for Materialized View Logs & Creating Materialized Join Views
+
+- The log records primary keys and product_id, which is used as a join column
+
+```sql
+CREATE MATERIALIZED VIEW LOG ON order_items WITH (product_id);
+
+CREATE MATERIALIZED VIEW LOG ON inventories
+   WITH (quantity_on_hand);
+
+CREATE MATERIALIZED VIEW warranty_orders REFRESH FAST AS
+  SELECT order_id, line_item_id, product_id FROM order_items o
+    WHERE EXISTS
+    (SELECT * FROM inventories i WHERE o.product_id = i.product_id
+      AND i.quantity_on_hand IS NOT NULL)
+  UNION
+    SELECT order_id, line_item_id, product_id FROM order_items
+    WHERE quantity > 5;
+```
 
 ### Refresh Materialized Views
 
@@ -312,7 +374,8 @@ CREATE MATERIALIZED VIEW hr.employees AS SELECT * FROM hr.employees@orc1.world;
 
 #### Updatable Materialized Views
 
-- You can make a materialized view updatable during creation by including the `FOR UPDATE` clause or enabling the equivalent option in the Replication Management tool. For changes made to an updatable materialized view to be pushed back to the master during refresh, the updatable materialized view must belong to a materialized view group.
+- You can make a materialized view updatable during creation by including the `FOR UPDATE` clause or enabling the equivalent option in the Replication Management tool.
+- For changes made to an updatable materialized view to be pushed back to the master during refresh, the updatable materialized view must belong to a materialized view group.
 - Updatable materialized views enable you to decrease the load on master sites because users can make changes to the data at the materialized view site. The following is an example of an updatable materialized view:
 
 ```sql
@@ -324,9 +387,9 @@ CREATE MATERIALIZED VIEW hr.departments FOR UPDATE AS SELECT * FROM hr.departmen
 ```sql
 BEGIN
   DBMS_REPCAT.CREATE_MVIEW_REPGROUP (
-    gname => 'hr_repg',
-    master => 'orc1.world',
-    propagation_mode => 'ASYNCHRONOUS');
+    gname => 'hr_repg', --> Name of the replication group. This group must exist at the specified master site or master materialized view site
+    master => 'orc1.world',--> Fully qualified database name of the database in the replication environment to use as the master site or master materialized view site. You can include a connection qualifier if necessary.
+    propagation_mode => 'ASYNCHRONOUS'); --> Method of propagation for all updatable materialized views in the replication group. Acceptable values are synchronous and asynchronous
 END;
 ```
 
@@ -335,11 +398,14 @@ END;
 ```sql
 BEGIN
   DBMS_REPCAT.CREATE_MVIEW_REPOBJECT (
-    gname => 'hr_repg',
-    sname => 'hr',
-    oname => 'departments',
-    type => 'SNAPSHOT',
-    min_communication => TRUE);
+    gname => 'hr_repg', --> Name of the replicated materialized view group to which you are adding an object. The schema name is used as the default group name if none is specified, and a materialized view group with the same name as the schema must exist for the procedure to complete successfully.
+    sname => 'hr', --> Name of the schema in which the object is located. The schema must be same as the schema that owns the master table or master materialized view on which this materialized view is based.
+    oname => 'departments', --> Name of the object that you want to add to the replicated materialized view group.
+    type => 'SNAPSHOT', --> Type of the object that you are replicating. The following types are supported:
+                          --  FUNCTION, INDEX, INDEXTYPE, OPERATOR, PACKAGE, PACKAGE BODY, PROCEDURE,
+                          --    SNAPSHOT, SYNONYM, TRIGGER, TYPE, TYPE BODY, VIEW
+                        -- Use SNAPSHOT type of the object is a materialized view.
+    min_communication => TRUE); --> This parameter is obsolete. Use the default value (TRUE).
 END;
 ```
 
@@ -358,7 +424,7 @@ CREATE MATERIALIZED VIEW oe.customers FOR UPDATE AS SELECT * FROM oe.customers@o
 
 #### Object Materialized Views
 
-- If a materialized view is based on an object table and is created using the OF type clause, then the materialized view is called an object materialized view. An object materialized view is structured in the same way as an object table. That is, an object materialized view is composed of row objects, and each row object is identified by an object identifier (OID) column.
+- If a materialized view is based on an object table and is created using the `OF` type clause, then the materialized view is called an object materialized view. An object materialized view is structured in the same way as an object table. That is, an object materialized view is composed of row objects, and each row object is identified by an object identifier (OID) column.
 
 #### `ROWID` Materialized Views
 
@@ -401,6 +467,22 @@ EXEC DBMS_STATS.GATHER_TABLE_STATS(USER, 'EMP_AGGR_MV');
 ```
 
 - When using materialized views to improve performance of transformations and aggregations, the `QUERY_REWRITE_INTEGRITY` and `QUERY_REWRITE_ENABLED` parameters must be set or the server will not be able to automatically take advantages of query rewrites. These parameters may be set in the pfile or spfile file if they are needed permanently. Later releases have them enabled by default.
+- When base tables contain large amount of data, it is expensive and time-consuming to compute the required aggregates or to compute joins between these tables. In such cases, queries can take minutes or even hours. Because materialized views contain already precomputed aggregates and joins, Oracle Database employs an extremely powerful process called query rewrite to quickly answer the query using materialized views.
+- One of the major benefits of creating and maintaining materialized views is the ability to take advantage of query rewrite, which transforms a SQL statement expressed in terms of tables or views into a statement accessing one or more materialized views that are defined on the detail tables. The transformation is transparent to the end user or application, requiring no intervention and no reference to the materialized view in the SQL statement. Because query rewrite is transparent, materialized views can be added or dropped just like indexes without invalidating the SQL in the application code.
+- When Does Oracle Rewrite a Query?
+  - A query is rewritten only when a certain number of conditions are met:
+    - Query rewrite must be enabled for the session.
+    - A materialized view must be enabled for query rewrite.
+    - The rewrite integrity level should allow the use of the materialized view. For example, if a materialized view is not fresh and query rewrite integrity is set to ENFORCED, then the materialized view is not used.
+    - Either all or part of the results requested by the query must be obtainable from the precomputed result stored in the materialized view or views.
+  - To test these conditions, the optimizer may depend on some of the data relationships declared by the user using constraints and dimensions, among others, hierarchies, referential integrity, and uniqueness of key data, and so on.
+- Ensuring that Query Rewrite Takes Effect:
+  - You must follow several conditions to enable query rewrite:
+  - Individual materialized views must have the `ENABLE QUERY REWRITE` clause.
+  - If this step is not completed, as described in Enabling Query Rewrite for Materialized Views, then a materialized view is never eligible for query rewrite.
+  - The session parameter `QUERY_REWRITE_ENABLED` must be set to `TRUE` (the default) or `FORCE`.
+  - Cost-based optimization must be used by setting the initialization parameter `OPTIMIZER_MODE` to `ALL_ROWS`, `FIRST_ROWS`, or `FIRST_ROWS_n`.
+  - You can use the DBMS_ADVISOR.TUNE_MVIEW procedure to optimize a CREATE MATERIALIZED VIEW statement to enable general QUERY REWRITE
 
 ```sql
 ALTER SESSION SET QUERY_REWRITE_INTEGRITY = TRUSTED;

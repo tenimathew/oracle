@@ -564,7 +564,7 @@ ALTER SESSION SET CONSTRAINTS = IMMEDIATE;
 
 ## Constraint States
 
-- Table constraints can be enabled and disabled using the `CREATE TABLE` or `ALTER TABLE` statement. In addition the VALIDATE or `NOVALIDATE` keywords can be used to alter the action of the state.
+- Table constraints can be enabled and disabled using the `CREATE TABLE` or `ALTER TABLE` statement. In addition the `VALIDATE` or `NOVALIDATE` keywords can be used to alter the action of the state.
 - `ENABLE VALIDATE` is the same as `ENABLE`. The constraint is checked and is guaranteed to hold for all rows.
 - `ENABLE NOVALIDATE` means the constraint is checked for new or modified rows, but existing data may violate the constraint.
 - `DISABLE NOVALIDATE` is the same as `DISABLE`. The constraint is not checked so data may violate the constraint.

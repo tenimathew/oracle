@@ -127,7 +127,7 @@ Because the `MERGE` is a deterministic statement, you cannot update the same row
 
 You can add an optional `DELETE WHERE` clause to the `MATCHED` clause to clean up after a merge operation. The `DELETE` clause deletes only the rows in the target table that match both `ON` and `DELETE WHERE` clauses.
 
-## INSERT ALL
+## INSERT ALL/FIRST
 
 ### Unconditional INSERT ALL statement
 
@@ -197,36 +197,3 @@ Note that a single conditional multitable insert statement can have up to 127 `W
 - The number of columns in all the `INSERT INTO` clauses must not exceed 999.
 - A table collection expression cannot be used in a multitable insert statement.
 - The subquery of the multitable insert statement cannot use a sequence.
-
-## INSERT FIRST
-
-- Using `INSERT FIRST` makes the multi-table insert work like a `CASE` expression, so the conditions are tested until the first match is found, and no further conditions are tested. We can also include an optional ELSE clause to catch any rows not already cause by a previous condition.
-
-```sql
-INSERT FIRST
-    WHEN id <= 3 THEN
-    INTO dest_tab1 VALUES(id, description)
-    WHEN id <= 5 THEN
-    INTO dest_tab2 VALUES(id, description)
-    ELSE
-    INTO dest_tab3 VALUES(id, description)
-SELECT id, description
-FROM source_tab;
-```
-
-```sql
-INSERT FIRST
-    WHEN id <= 3 THEN
-    INTO dest_tab1 VALUES(id, description)
-    ELSE
-    INTO dest_tab2 VALUES(id, description)
-    INTO dest_tab3 VALUES(id, description)
-SELECT id, description
-```
-
-- Multi-table inserts can only be performed on tables, not on views or materialized views.
-- You cannot perform a multi-table insert via a DB link.
-- You cannot perform multi-table inserts into nested tables.
-- The sum of all the INTO columns cannot exceed 999.
-- Sequences cannot be used in the multi-table insert statement. It is considered a single statement, so only one sequence value will be generated and used for all rows.
-- Multi-table inserts can't be used with plan stability.
