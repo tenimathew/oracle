@@ -11,7 +11,7 @@ description: Intro
 - GIT_USER=tenimathew yarn deploy
 - Generate tocken for password
 
-![](PLSQL.pdf)
+[PLSQL.pdf](PLSQL.pdf)
 
 ## SQL Commands
 
